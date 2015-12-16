@@ -45,11 +45,13 @@ class BarrageViewController: UIViewController {
     }
 
     private func generateComments() {
+        var fontSizeFactor: UInt32
         var commentsArray = [LCBullet]()
         for i in Range(start: 0, end: 10) {
             let comment = "Bullet\(i)"
 
-            let fontSize: CGFloat = CGFloat(arc4random_uniform(20) + 10)
+            fontSizeFactor = arc4random_uniform(2)
+            let fontSize: CGFloat = fontSizeFactor == 0 ? 15.0 : 20.0
 
             var bullet = LCBullet()
             bullet.content = comment
@@ -111,9 +113,16 @@ class BarrageViewController: UIViewController {
                 chosedFontSize = button.tag == 201 ? 15.0 : 20.0
             }
         }
-
     }
 
+    @IBAction func barrageSpeedUp(sender: AnyObject) {
+        barrageView.shootInterval -= 0.1
+    }
+
+    @IBAction func barrageSpeedDown(sender: AnyObject) {
+        barrageView.shootInterval += 0.1
+        
+    }
 }
 
 extension BarrageViewController: UITextFieldDelegate {

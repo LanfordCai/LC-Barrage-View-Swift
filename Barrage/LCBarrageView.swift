@@ -22,8 +22,22 @@ var kBarrageStatusChanged = "barrageStatusChanged"
 
 final class LCBarrageView: UIView {
 
-    var defaultColor = UIColor.whiteColor()
-    var defaultFontSize: CGFloat = 15.0
+    private var defaultColor = UIColor.whiteColor()
+    private var defaultFontSize: CGFloat = 15.0
+
+    var shootInterval: Double = 0.5 {
+        didSet {
+            if shootInterval < 0.1 {
+                shootInterval = 0.1
+            }
+
+            if shootInterval > 1.0 {
+                shootInterval = 1.0
+            }
+
+            fire()
+        }
+    }
 
     var bulletLabelNumber: Int = 8
 
@@ -41,53 +55,7 @@ final class LCBarrageView: UIView {
     // 弹幕内容
     private var gunpowderArray = [LCBullet]()
     
-    // 色表
-    private let colorArray = [
-        UIColor.redColor(),
-        UIColor.whiteColor(),
-        UIColor.blueColor(),
-        UIColor.brownColor(),
-        UIColor.purpleColor(),
-        UIColor.greenColor(),
-        UIColor.magentaColor(),
-        UIColor.lightGrayColor(),
-        UIColor.orangeColor(),
-        UIColor.yellowColor()
-    ]
-    
     // 加载弹幕内容
-    var bulletContentArray: [String]? {
-        didSet {
-//            if let contents = bulletContentArray where !contents.isEmpty {
-//                for content in contents {
-////                    let color: UIColor = randomColor()
-//                    let colorIndex: Int = Int(arc4random_uniform(UInt32(colorArray.count)))
-//                    let color = colorArray[colorIndex]
-//                    let attrDict = [NSForegroundColorAttributeName: color,
-//                        NSFontAttributeName: UIFont.systemFontOfSize(15)
-//                    ]
-//                    
-//                    let attributedStr = NSMutableAttributedString(string: content)
-//                    attributedStr.addAttributes(attrDict, range: NSMakeRange(0, attributedStr.length))
-//                    self.gunpowderArray.append(attributedStr)
-//                }
-//                loadBullets()
-//            }
-        }
-    }
-
-    var bulletColorArray: [UIColor]? {
-        didSet {
-
-        }
-    }
-
-    var bulletFontSizeArray: [CGFloat]? {
-        didSet {
-
-        }
-    }
-
     func processBullets(bulletsArray bulletsArray: [LCBullet]?) {
         guard let bulletsArray = bulletsArray where !bulletsArray.isEmpty else {
             print("No contents to present")
@@ -167,7 +135,7 @@ final class LCBarrageView: UIView {
         
         removeTimer()
         
-        barrageTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "addBullet", userInfo: nil, repeats: true)
+        barrageTimer = NSTimer.scheduledTimerWithTimeInterval(shootInterval, target: self, selector: "addBullet", userInfo: nil, repeats: true)
     }
 
     func stop() {
