@@ -47,20 +47,33 @@ class BarrageViewController: UIViewController {
     private func generateComments() {
         var fontSizeFactor: UInt32
         var commentsArray = [LCBullet]()
-        for i in Range(start: 0, end: 10) {
+        var bulletTypeFactor: UInt32
+
+        for i in Range(start: 0, end: 40) {
             let comment = "Bullet\(i)"
 
             fontSizeFactor = arc4random_uniform(2)
             let fontSize: CGFloat = fontSizeFactor == 0 ? 15.0 : 20.0
 
+            bulletTypeFactor = arc4random_uniform(3)
+
             var bullet = LCBullet()
             bullet.content = comment
             bullet.fontSize = fontSize
 
+            switch bulletTypeFactor {
+            case 0:
+                bullet.bulletType = .Top
+            case 1:
+                bullet.bulletType = .Roll
+            default:
+                bullet.bulletType = .Bottom
+            }
+
             commentsArray.append(bullet)
         }
 
-        barrageView.bulletLabelNumber = 10
+        barrageView.bulletLabelNumber = 60
 //        barrageView.
 
         barrageView.processBullets(bulletsArray: commentsArray)
