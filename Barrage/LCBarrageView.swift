@@ -25,6 +25,11 @@ struct LCBullet {
     var bulletType: BulletType = .Roll
 }
 
+struct LCTrajectory {
+    var locationY: CGFloat
+    var coldTime: Int = 0
+}
+
 var kBarrageStatusChanged = "barrageStatusChanged"
 
 final class LCBarrageView: UIView {
@@ -82,6 +87,7 @@ final class LCBarrageView: UIView {
     private var preBulletY: CGFloat = 0.0
     // 弹道数
     private let trajectoryNumber: Int = 20
+    private lazy var trajectoriesArray = [LCTrajectory]()
     
     private var barrageTimer: NSTimer?
     
@@ -123,6 +129,9 @@ final class LCBarrageView: UIView {
         }
 
         loadBullets()
+
+        createTrajectories()
+
     }
 
     // MARK: Life-Cycle
@@ -192,6 +201,17 @@ final class LCBarrageView: UIView {
             let bullet = UILabel()
             bulletLabelArray.append(bullet)
             self.addSubview(bullet)
+        }
+    }
+
+    private func createTrajectories() {
+        let viewHeight = self.bounds.height == 0.0 ? ScreenWidth : self.bounds.height
+//        let viewWidth = self.bounds.width == 0.0 ? ScreenWidth : self.bounds.width]
+
+        for i in Range(start: 0, end: trajectoryNumber) {
+            let bulletY: CGFloat = CGFloat((Int(viewHeight - 40) / trajectoryNumber) * i) + 20.0
+            let trajectory = LCTrajectory(locationY: bulletY, coldTime: 0)
+            trajectoriesArray.append(trajectory)
         }
     }
 
@@ -319,33 +339,38 @@ final class LCBarrageView: UIView {
                 self.flyingBulletsNumber--
         }
     }
-    
+
     private func shootRollBullet(bullet bullet: UIView, bulletSize: CGSize) {
-        let viewHeight = self.bounds.height == 0.0 ? ScreenWidth : self.bounds.height
         let viewWidth = self.bounds.width == 0.0 ? ScreenWidth : self.bounds.width
 
-
-        // MARK: Roll
-        var bulletY: CGFloat = CGFloat(Int(arc4random()) % (Int(viewHeight - 40) / trajectoryNumber)) * CGFloat(trajectoryNumber) + 20
-
-        while bulletY == preBulletY {
-            bulletY = CGFloat(Int(arc4random()) % (Int(viewHeight - 40) / trajectoryNumber)) * CGFloat(trajectoryNumber) + 20
+        for i in Range(start: 0, end: trajectoryNumber) {
+            if trajectoriesArray[i].coldTime != 0 {
+                trajectoriesArray[i].coldTime--
+            }
         }
 
-        preBulletY = bulletY
+        var pickedTrajectory: Int = Int(arc4random_uniform(UInt32(trajectoryNumber)))
+        while trajectoriesArray[pickedTrajectory].coldTime != 0 {
+            pickedTrajectory = Int(arc4random_uniform(UInt32(trajectoryNumber)))
+
+        }
+
+        trajectoriesArray[pickedTrajectory].coldTime = 10
+        let bulletY = trajectoriesArray[pickedTrajectory].locationY
+
 
         let bulletFrame = CGRectMake(viewWidth, bulletY, bulletSize.width, bulletSize.height)
         bullet.frame = bulletFrame
         bullet.alpha = 1.0
 
         // 弹幕速度不仅仅和发射间隔相关，和 duration 也相关
-        let duration: CGFloat = CGFloat(arc4random() % 20) / 10.0 + rollOutDuration
-        
+        let duration: CGFloat = CGFloat(arc4random() % 10) / 10.0 + rollOutDuration
+
         let endPoint = CGPointMake(0 - bulletSize.width, bullet.frame.origin.y)
         let endRect = CGRectMake(endPoint.x, endPoint.y, bulletSize.width, bulletSize.height)
-        
+
         flyingBulletsNumber++
-        
+
         UIView.animateWithDuration(NSTimeInterval(duration), animations: { () -> Void in
             UIView.setAnimationCurve(.Linear)
             bullet.frame = endRect

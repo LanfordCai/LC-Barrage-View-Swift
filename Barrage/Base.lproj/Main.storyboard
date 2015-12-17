@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ujJ-UL-SBf">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fn5-ve-aKb" customClass="LCBarrageView" customModule="Barrage">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="466"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="402"/>
                                 <color key="backgroundColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Op1-Ud-Tx0" userLabel="TypeView">
@@ -415,7 +415,7 @@
                             <constraint firstItem="fn5-ve-aKb" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="gLf-NZ-oai"/>
                             <constraint firstItem="Jln-wo-g26" firstAttribute="top" secondItem="fn5-ve-aKb" secondAttribute="bottom" id="j71-T7-t9q"/>
                             <constraint firstAttribute="trailing" secondItem="Op1-Ud-Tx0" secondAttribute="trailing" id="kjf-1G-Oyb"/>
-                            <constraint firstItem="fn5-ve-aKb" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="rdJ-0j-Jcf"/>
+                            <constraint firstItem="fn5-ve-aKb" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="64" id="rdJ-0j-Jcf"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -426,6 +426,7 @@
                             </mask>
                         </variation>
                     </view>
+                    <navigationItem key="navigationItem" id="lSF-sv-Nes"/>
                     <connections>
                         <outlet property="barrageView" destination="fn5-ve-aKb" id="c1N-Va-f5C"/>
                         <outlet property="blueButton" destination="vd2-kQ-6ui" id="ZBU-yh-uBr"/>
@@ -443,7 +444,63 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="340" y="387"/>
+            <point key="canvasLocation" x="1173" y="387"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="mkK-zA-qDG">
+            <objects>
+                <viewController id="lok-U8-SoF" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="a6e-72-Fss"/>
+                        <viewControllerLayoutGuide type="bottom" id="NtK-s2-zCK"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cQd-8c-Ygl">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xgw-vy-EtE">
+                                <rect key="frame" x="262" y="235" width="77" height="30"/>
+                                <state key="normal" title="Storyboard"/>
+                                <connections>
+                                    <segue destination="BYZ-38-t0r" kind="show" id="sdF-ui-PqP"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Lg-zE-rQC">
+                                <rect key="frame" x="277" y="335" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="0Lg-zE-rQC" firstAttribute="centerX" secondItem="cQd-8c-Ygl" secondAttribute="centerX" id="0kT-Ia-6SB"/>
+                            <constraint firstItem="0Lg-zE-rQC" firstAttribute="centerY" secondItem="cQd-8c-Ygl" secondAttribute="centerY" constant="50" id="HlR-4u-zCf"/>
+                            <constraint firstItem="xgw-vy-EtE" firstAttribute="centerY" secondItem="cQd-8c-Ygl" secondAttribute="centerY" constant="-50" id="n76-Mb-oq9"/>
+                            <constraint firstItem="xgw-vy-EtE" firstAttribute="centerX" secondItem="cQd-8c-Ygl" secondAttribute="centerX" id="wO2-Vy-PNB"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="27Y-Qt-xSF"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vbs-Zu-AdR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="488" y="387"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="brW-kT-Z5c">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ujJ-UL-SBf" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="kqF-WX-4oe">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="lok-U8-SoF" kind="relationship" relationship="rootViewController" id="Y0b-7C-EeH"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="i5T-AU-C7R" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-196" y="387"/>
         </scene>
     </scenes>
 </document>
