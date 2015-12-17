@@ -29,26 +29,11 @@ var kBarrageStatusChanged = "barrageStatusChanged"
 
 final class LCBarrageView: UIView {
 
-    var shortestShootInterval: Double = 0.05 {
-        didSet {
-            if shortestShootInterval < 0.05 {
-                shortestShootInterval = 0.05
-            }
-        }
-    }
+    var bulletLabelNumber: Int = 20
 
-    var longestShootInterval: Double = 1.0 {
-        didSet {
-            if longestShootInterval > 2.0 {
-                longestShootInterval = 2.0
-            }
-        }
-    }
+    var rollOutDuration: CGFloat = 5.0
 
-    private var defaultColor = UIColor.whiteColor()
-    private var defaultFontSize: CGFloat = 15.0
-
-    var shootInterval: Double = 0.1 {
+    var shootInterval: Double = 0.3 {
         didSet {
             if shootInterval < shortestShootInterval {
                 shootInterval = shortestShootInterval
@@ -62,7 +47,35 @@ final class LCBarrageView: UIView {
         }
     }
 
-    var bulletLabelNumber: Int = 8
+    var blockTopBullets = false
+    var blockBottomBullets = false
+
+    private var defaultColor = UIColor.whiteColor()
+    private var defaultFontSize: CGFloat = 15.0
+
+    private var shortestShootInterval: Double = 0.05 {
+        didSet {
+            if shortestShootInterval < 0.05 {
+                shortestShootInterval = 0.05
+            }
+        }
+    }
+
+    private var longestShootInterval: Double = 1.0 {
+        didSet {
+            if longestShootInterval > 2.0 {
+                longestShootInterval = 2.0
+            }
+        }
+    }
+
+
+    var topOffset: CGFloat = 10.0
+    private var topBulletNumber: Int = 0
+
+    var bottomOffset: CGFloat = 30.0
+    private var bottomBulletNumber: Int = 0
+
 
     private var flyingBulletsNumber: Int = 0
     
@@ -78,11 +91,6 @@ final class LCBarrageView: UIView {
     // 弹幕内容
     private var gunpowderArray = [LCBullet]()
 
-    var topOffset: CGFloat = 10.0
-    private var topBulletNumber: Int = 0
-
-    var bottomOffset: CGFloat = 30.0
-    private var bottomBulletNumber: Int = 0
 
     // 加载弹幕内容
     func processBullets(bulletsArray bulletsArray: [LCBullet]?) {
@@ -256,6 +264,11 @@ final class LCBarrageView: UIView {
     }
 
     private func shootBottomBullet(bullet bullet: UILabel, bulletSize: CGSize) {
+        guard !blockBottomBullets else {
+            bulletLabelArray.insert(bullet, atIndex: 0)
+            return
+        }
+
         flyingBulletsNumber++
         let bulletY: CGFloat = self.bounds.height - bottomOffset
         let bulletX: CGFloat = 0.5 * (self.bounds.width - bulletSize.width)
@@ -270,7 +283,7 @@ final class LCBarrageView: UIView {
                 bullet.alpha = 0.0
                 self.bulletLabelArray.insert(bullet, atIndex: 0)
                 self.bottomBulletNumber++
-                if self.bottomBulletNumber > 5 {
+                if self.bottomBulletNumber > 4 {
                     self.bottomOffset = 30
                     self.bottomBulletNumber = 0
                 }
@@ -279,6 +292,11 @@ final class LCBarrageView: UIView {
     }
 
     private func shootTopBullet(bullet bullet: UILabel, bulletSize: CGSize) {
+        guard !blockTopBullets else {
+            bulletLabelArray.insert(bullet, atIndex: 0)
+            return
+        }
+
         flyingBulletsNumber++
         let bulletY: CGFloat = topOffset
         let bulletX: CGFloat = 0.5 * (self.bounds.width - bulletSize.width)
@@ -293,7 +311,8 @@ final class LCBarrageView: UIView {
                 bullet.alpha = 0.0
                 self.bulletLabelArray.insert(bullet, atIndex: 0)
                 self.topBulletNumber++
-                if self.topBulletNumber > 5 {
+                // TODO: 这个 BulletNumber 需要和速度挂钩
+                if self.topBulletNumber > 4 {
                     self.topOffset = 10
                     self.topBulletNumber = 0
                 }
@@ -318,11 +337,12 @@ final class LCBarrageView: UIView {
         let bulletFrame = CGRectMake(viewWidth, bulletY, bulletSize.width, bulletSize.height)
         bullet.frame = bulletFrame
         bullet.alpha = 1.0
-        let randomFactor = arc4random() % 6
-        let duration = randomFactor + 3
+
+        // 弹幕速度不仅仅和发射间隔相关，和 duration 也相关
+        let duration: CGFloat = CGFloat(arc4random() % 20) / 10.0 + rollOutDuration
         
-        let endPoint = CGPointMake(0 - bullet.bounds.width, bullet.frame.origin.y)
-        let endRect = CGRectMake(endPoint.x, endPoint.y, bullet.bounds.width, bullet.bounds.height)
+        let endPoint = CGPointMake(0 - bulletSize.width, bullet.frame.origin.y)
+        let endRect = CGRectMake(endPoint.x, endPoint.y, bulletSize.width, bulletSize.height)
         
         flyingBulletsNumber++
         

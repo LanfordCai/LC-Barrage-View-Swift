@@ -23,6 +23,12 @@ class BarrageViewController: UIViewController {
     var colorBar = [UIButton]()
     var chosedColor: UIColor?
 
+    @IBOutlet weak var topTypeButton: UIButton!
+    @IBOutlet weak var rollTypeButton: UIButton!
+    @IBOutlet weak var bottomTypeButton: UIButton!
+    var bulletTypeBar = [UIButton]()
+    var chosedType: BulletType?
+
     @IBOutlet weak var barrageView: LCBarrageView!
 
     @IBOutlet weak var commentTextLabel: UITextField!
@@ -40,8 +46,12 @@ class BarrageViewController: UIViewController {
         commentTextLabel.delegate = self
         colorBar = [redButton, yellowButton, greenButton, blueButton]
         fontBar = [smallFontButton, largeFontButton]
+        bulletTypeBar = [topTypeButton, rollTypeButton, bottomTypeButton]
         smallFontButton.selected = true
         chosedFontSize = 15.0
+
+        rollTypeButton.selected = true
+        chosedType = .Roll
     }
 
     private func generateComments() {
@@ -128,19 +138,68 @@ class BarrageViewController: UIViewController {
         }
     }
 
-    @IBAction func barrageSpeedUp(sender: AnyObject) {
-        barrageView.shootInterval -= 0.1
+    @IBAction func bulletTypeButtonTapped(sender: AnyObject?) {
+        guard let bulletTypeButton = sender as? UIButton else {
+            return
+        }
+
+        bulletTypeButton.selected = true
+
+        switch bulletTypeButton.tag {
+        case 301:
+            chosedType = .Top
+        case 303:
+            chosedType = .Bottom
+        default:
+            chosedType = .Roll
+        }
+
+        for button in bulletTypeBar {
+            if button.tag != bulletTypeButton.tag {
+                button.selected = false
+            }
+        }
+
     }
 
-    @IBAction func barrageSpeedDown(sender: AnyObject) {
+    @IBAction func bulletSpeedUp(sender: AnyObject) {
+        barrageView.rollOutDuration /= 2.0
+    }
+
+    @IBAction func bulletSpeedDown(sender: AnyObject) {
+        barrageView.rollOutDuration *= 2.0
+    }
+
+    @IBAction func blockTopBullets(sender: AnyObject) {
+        guard let blockTopButton = sender as? UIButton else {
+            return
+        }
+
+        blockTopButton.selected = !blockTopButton.selected
+        barrageView.blockTopBullets = !barrageView.blockTopBullets
+    }
+
+    @IBAction func blockBottomBullets(sender: AnyObject) {
+        guard let blockBottomButton = sender as? UIButton else {
+            return
+        }
+
+        blockBottomButton.selected = !blockBottomButton.selected
+        barrageView.blockBottomBullets = !barrageView.blockBottomBullets
+    }
+    
+
+    @IBAction func shootIntervalBeLonger(sender: AnyObject) {
         barrageView.shootInterval += 0.1
-        
+    }
+
+    @IBAction func shootIntervalBeShorter(sender: AnyObject) {
+        barrageView.shootInterval -= 0.1
+
     }
 }
 
 extension BarrageViewController: UITextFieldDelegate {
-    func textFieldDidBeginEditing(textField: UITextField) {
-    }
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         guard let text = textField.text else {
@@ -149,7 +208,8 @@ extension BarrageViewController: UITextFieldDelegate {
         }
 
         print("Ready to loadNewBullet")
-        barrageView.loadNewBullet(contentStr: text, color: chosedColor, fontSize: chosedFontSize)
+        barrageView.loadNewBullet(contentStr: text, color: chosedColor, fontSize: chosedFontSize, bulletType: chosedType!)
+        textField.text = ""
 
         return true
     }
