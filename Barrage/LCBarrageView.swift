@@ -30,10 +30,6 @@ struct LCTrajectory {
     var coldTime: Int = 0
 }
 
-extension Int {
-    
-}
-
 final class LCBarrageView: UIView {
 
     // The number of UILabel used to show bullet
@@ -59,7 +55,6 @@ final class LCBarrageView: UIView {
             fire()
         }
     }
-
 
     private var bulletLabelArray = [UILabel]()
     private var ammunitionArray = [LCBullet]()
@@ -112,6 +107,7 @@ final class LCBarrageView: UIView {
 
     deinit {
         removeTimer()
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
 
@@ -122,6 +118,8 @@ final class LCBarrageView: UIView {
         guard let bulletsArray = bulletsArray where !bulletsArray.isEmpty else {
             return
         }
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: UIDeviceOrientationDidChangeNotification, object: nil)
 
         var bulletColor = defaultColor
         var bulletFontSize = defaultFontSize
@@ -202,13 +200,16 @@ final class LCBarrageView: UIView {
 
     private func createTrajectories() {
         let viewHeight = self.bounds.height
-
+        trajectoriesArray.removeAll()
         for i in 0..<trajectoryNumber {
-            print("lalalala \(i)")
             let bulletY: CGFloat = CGFloat((Int(viewHeight - 40) / trajectoryNumber) * i) + 20.0
             let trajectory = LCTrajectory(locationY: bulletY, coldTime: 0)
             trajectoriesArray.append(trajectory)
         }
+    }
+
+    dynamic private func orientationChanged() {
+        isTrajectoryCreated = false
     }
 
     dynamic private func addBullets() {

@@ -10,7 +10,7 @@
 		3F361B901C22BB5300644121 /* SecondBarrageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F361B8F1C22BB5300644121 /* SecondBarrageViewController.swift */; };
 		3F361B921C22CBD700644121 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F361B911C22CBD700644121 /* HomeViewController.swift */; };
 		3F8C42F41C2110B400189326 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8C42F31C2110B400189326 /* AppDelegate.swift */; };
-		3F8C42F61C2110B400189326 /* BarrageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8C42F51C2110B400189326 /* BarrageViewController.swift */; };
+		3F8C42F61C2110B400189326 /* FirstBarrageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8C42F51C2110B400189326 /* FirstBarrageViewController.swift */; };
 		3F8C42F91C2110B400189326 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F8C42F71C2110B400189326 /* Main.storyboard */; };
 		3F8C42FB1C2110B400189326 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F8C42FA1C2110B400189326 /* Assets.xcassets */; };
 		3F8C42FE1C2110B400189326 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F8C42FC1C2110B400189326 /* LaunchScreen.storyboard */; };
@@ -22,7 +22,7 @@
 		3F361B911C22CBD700644121 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		3F8C42F01C2110B400189326 /* Barrage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barrage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F8C42F31C2110B400189326 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3F8C42F51C2110B400189326 /* BarrageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarrageViewController.swift; sourceTree = "<group>"; };
+		3F8C42F51C2110B400189326 /* FirstBarrageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstBarrageViewController.swift; sourceTree = "<group>"; };
 		3F8C42F81C2110B400189326 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3F8C42FA1C2110B400189326 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3F8C42FD1C2110B400189326 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -60,10 +60,10 @@
 		3F8C42F21C2110B400189326 /* Barrage */ = {
 			isa = PBXGroup;
 			children = (
+				3FDA7BE91C28233300318F20 /* LCBarrageView */,
 				3F8C42F31C2110B400189326 /* AppDelegate.swift */,
 				3F361B911C22CBD700644121 /* HomeViewController.swift */,
-				3F8C43051C2112C400189326 /* LCBarrageView.swift */,
-				3F8C42F51C2110B400189326 /* BarrageViewController.swift */,
+				3F8C42F51C2110B400189326 /* FirstBarrageViewController.swift */,
 				3F361B8F1C22BB5300644121 /* SecondBarrageViewController.swift */,
 				3F8C42F71C2110B400189326 /* Main.storyboard */,
 				3F8C42FA1C2110B400189326 /* Assets.xcassets */,
@@ -71,6 +71,14 @@
 				3F8C42FF1C2110B400189326 /* Info.plist */,
 			);
 			path = Barrage;
+			sourceTree = "<group>";
+		};
+		3FDA7BE91C28233300318F20 /* LCBarrageView */ = {
+			isa = PBXGroup;
+			children = (
+				3F8C43051C2112C400189326 /* LCBarrageView.swift */,
+			);
+			name = LCBarrageView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,7 +155,7 @@
 				3F361B921C22CBD700644121 /* HomeViewController.swift in Sources */,
 				3F8C43061C2112C400189326 /* LCBarrageView.swift in Sources */,
 				3F361B901C22BB5300644121 /* SecondBarrageViewController.swift in Sources */,
-				3F8C42F61C2110B400189326 /* BarrageViewController.swift in Sources */,
+				3F8C42F61C2110B400189326 /* FirstBarrageViewController.swift in Sources */,
 				3F8C42F41C2110B400189326 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

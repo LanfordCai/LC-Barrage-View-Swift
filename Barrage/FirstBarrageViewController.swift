@@ -1,5 +1,5 @@
 //
-//  BarrageViewController.swift
+//  FirstBarrageViewController.swift
 //  Barrage
 //
 //  Created by CaiGavin on 12/16/15.
@@ -8,8 +8,11 @@
 
 import UIKit
 
-class BarrageViewController: UIViewController {
+class FirstBarrageViewController: UIViewController {
+    @IBOutlet weak var editView: UIView!
+    @IBOutlet weak var editViewBottomConstraint: NSLayoutConstraint!
 
+    @IBOutlet weak var editTextField: UITextField!
     @IBOutlet weak var smallFontButton: UIButton!
     @IBOutlet weak var largeFontButton: UIButton!
     var fontBar = [UIButton]()
@@ -34,7 +37,10 @@ class BarrageViewController: UIViewController {
 
     @IBOutlet weak var fireButton: UIButton!
 
-    let colorArray = [
+    @IBOutlet weak var shootIntervalLabel: UILabel!
+    @IBOutlet weak var rollOutDrationLabel: UILabel!
+
+    private let colorArray = [
         UIColor.redColor(),
         UIColor.whiteColor(),
         UIColor.blueColor(),
@@ -47,11 +53,31 @@ class BarrageViewController: UIViewController {
         UIColor.yellowColor()
     ]
 
+
+    // MARK: Life-Cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         configuration()
         generateComments()
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillChangeFrame:", name: UIKeyboardWillChangeFrameNotification, object: nil)
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+
+
+    // MARK: Methods
+
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        super.touchesBegan(touches, withEvent: event)
+        editTextField.resignFirstResponder()
     }
 
     private func configuration() {
@@ -108,15 +134,26 @@ class BarrageViewController: UIViewController {
         }
 
         barrageView.bulletLabelNumber = 60
-//        barrageView.
 
         barrageView.processBullets(bulletsArray: commentsArray)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    dynamic private func barrageViewBeTapped() {
+        editTextField.resignFirstResponder()
     }
+
+    dynamic private func keyboardWillChangeFrame(note: NSNotification) {
+        let keyboardFrame = note.userInfo![UIKeyboardFrameEndUserInfoKey]!.CGRectValue
+        let distance = keyboardFrame.origin.y - ScreenHeight
+
+        self.editViewBottomConstraint.constant = -distance
+        UIView.animateWithDuration(0.3) { () -> Void in
+            self.view.layoutIfNeeded()
+        }
+    }
+
+
+    // MARK: Actions
 
     @IBAction func fire(sender: AnyObject) {
         if let fireButton = sender as? UIButton {
@@ -183,15 +220,16 @@ class BarrageViewController: UIViewController {
                 button.selected = false
             }
         }
-
     }
 
-    @IBAction func bulletSpeedUp(sender: AnyObject) {
-        barrageView.rollOutDuration /= 2.0
-    }
-
-    @IBAction func bulletSpeedDown(sender: AnyObject) {
+    @IBAction func rollOutDurationBeLonger(sender: AnyObject) {
         barrageView.rollOutDuration *= 2.0
+        rollOutDrationLabel.text = "\(barrageView.rollOutDuration)"
+    }
+
+    @IBAction func rollOutDurationBeShorter(sender: AnyObject) {
+        barrageView.rollOutDuration /= 2.0
+        rollOutDrationLabel.text = "\(barrageView.rollOutDuration)"
     }
 
     @IBAction func blockTopBullets(sender: AnyObject) {
@@ -211,19 +249,22 @@ class BarrageViewController: UIViewController {
         blockBottomButton.selected = !blockBottomButton.selected
         barrageView.blockBottomBullets = !barrageView.blockBottomBullets
     }
-    
+
 
     @IBAction func shootIntervalBeLonger(sender: AnyObject) {
         barrageView.shootInterval += 0.1
+        shootIntervalLabel.text = "\(barrageView.shootInterval)"
     }
 
     @IBAction func shootIntervalBeShorter(sender: AnyObject) {
         barrageView.shootInterval -= 0.1
-
+        shootIntervalLabel.text = "\(barrageView.shootInterval)"
     }
+
 }
 
-extension BarrageViewController: UITextFieldDelegate {
+extension FirstBarrageViewController: UITextFieldDelegate {
+
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         guard let text = textField.text else {
@@ -231,10 +272,9 @@ extension BarrageViewController: UITextFieldDelegate {
             return false
         }
 
-        print("Ready to loadNewBullet")
         barrageView.addNewBullet(content: text, color: chosedColor, fontSize: chosedFontSize, bulletType: chosedType!)
         textField.text = ""
-
+        textField.resignFirstResponder()
         return true
     }
 }
