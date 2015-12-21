@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F361B901C22BB5300644121 /* SecondBarrageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F361B8F1C22BB5300644121 /* SecondBarrageViewController.swift */; };
+		3F361B921C22CBD700644121 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F361B911C22CBD700644121 /* HomeViewController.swift */; };
 		3F8C42F41C2110B400189326 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8C42F31C2110B400189326 /* AppDelegate.swift */; };
 		3F8C42F61C2110B400189326 /* BarrageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8C42F51C2110B400189326 /* BarrageViewController.swift */; };
 		3F8C42F91C2110B400189326 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F8C42F71C2110B400189326 /* Main.storyboard */; };
@@ -16,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3F361B8F1C22BB5300644121 /* SecondBarrageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondBarrageViewController.swift; sourceTree = "<group>"; };
+		3F361B911C22CBD700644121 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		3F8C42F01C2110B400189326 /* Barrage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barrage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F8C42F31C2110B400189326 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3F8C42F51C2110B400189326 /* BarrageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarrageViewController.swift; sourceTree = "<group>"; };
@@ -57,8 +61,10 @@
 			isa = PBXGroup;
 			children = (
 				3F8C42F31C2110B400189326 /* AppDelegate.swift */,
+				3F361B911C22CBD700644121 /* HomeViewController.swift */,
 				3F8C43051C2112C400189326 /* LCBarrageView.swift */,
 				3F8C42F51C2110B400189326 /* BarrageViewController.swift */,
+				3F361B8F1C22BB5300644121 /* SecondBarrageViewController.swift */,
 				3F8C42F71C2110B400189326 /* Main.storyboard */,
 				3F8C42FA1C2110B400189326 /* Assets.xcassets */,
 				3F8C42FC1C2110B400189326 /* LaunchScreen.storyboard */,
@@ -138,7 +144,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F361B921C22CBD700644121 /* HomeViewController.swift in Sources */,
 				3F8C43061C2112C400189326 /* LCBarrageView.swift in Sources */,
+				3F361B901C22BB5300644121 /* SecondBarrageViewController.swift in Sources */,
 				3F8C42F61C2110B400189326 /* BarrageViewController.swift in Sources */,
 				3F8C42F41C2110B400189326 /* AppDelegate.swift in Sources */,
 			);
@@ -288,6 +296,7 @@
 				3F8C43041C2110B400189326 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

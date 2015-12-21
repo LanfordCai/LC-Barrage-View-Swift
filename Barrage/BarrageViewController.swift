@@ -10,7 +10,6 @@ import UIKit
 
 class BarrageViewController: UIViewController {
 
-
     @IBOutlet weak var smallFontButton: UIButton!
     @IBOutlet weak var largeFontButton: UIButton!
     var fontBar = [UIButton]()
@@ -35,6 +34,19 @@ class BarrageViewController: UIViewController {
 
     @IBOutlet weak var fireButton: UIButton!
 
+    let colorArray = [
+        UIColor.redColor(),
+        UIColor.whiteColor(),
+        UIColor.blueColor(),
+        UIColor.brownColor(),
+        UIColor.purpleColor(),
+        UIColor.greenColor(),
+        UIColor.magentaColor(),
+        UIColor.lightGrayColor(),
+        UIColor.orangeColor(),
+        UIColor.yellowColor()
+    ]
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -58,18 +70,30 @@ class BarrageViewController: UIViewController {
         var fontSizeFactor: UInt32
         var commentsArray = [LCBullet]()
         var bulletTypeFactor: UInt32
+        var colorPicker: UInt32
 
-        for i in Range(start: 0, end: 40) {
-            let comment = "Bullet\(i)"
+        for i in 0..<40 {
+            var comment = "Bullet\(i)"
 
             fontSizeFactor = arc4random_uniform(2)
             let fontSize: CGFloat = fontSizeFactor == 0 ? 15.0 : 20.0
 
+            for _ in 0..<(fontSizeFactor + 2) {
+                comment += "Biu"
+            }
+
             bulletTypeFactor = arc4random_uniform(3)
+
+            for _ in 0..<(bulletTypeFactor + 2) {
+                comment += "Biu~"
+            }
+
+            colorPicker = arc4random_uniform(10)
 
             var bullet = LCBullet()
             bullet.content = comment
             bullet.fontSize = fontSize
+            bullet.color = colorArray[Int(colorPicker)]
 
             switch bulletTypeFactor {
             case 0:
@@ -208,7 +232,7 @@ extension BarrageViewController: UITextFieldDelegate {
         }
 
         print("Ready to loadNewBullet")
-        barrageView.loadNewBullet(contentStr: text, color: chosedColor, fontSize: chosedFontSize, bulletType: chosedType!)
+        barrageView.addNewBullet(content: text, color: chosedColor, fontSize: chosedFontSize, bulletType: chosedType!)
         textField.text = ""
 
         return true
