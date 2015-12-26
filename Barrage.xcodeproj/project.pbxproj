@@ -81,7 +81,7 @@
 			children = (
 				3F8C43051C2112C400189326 /* LCBarrageView.swift */,
 			);
-			name = LCBarrageView;
+			path = LCBarrageView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
