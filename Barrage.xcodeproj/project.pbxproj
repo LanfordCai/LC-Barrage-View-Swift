@@ -15,6 +15,7 @@
 		3F8C42FB1C2110B400189326 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F8C42FA1C2110B400189326 /* Assets.xcassets */; };
 		3F8C42FE1C2110B400189326 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F8C42FC1C2110B400189326 /* LaunchScreen.storyboard */; };
 		3F8C43061C2112C400189326 /* LCBarrageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8C43051C2112C400189326 /* LCBarrageView.swift */; };
+		3FE2CE351C28D26A00E1EE7F /* barrage.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3FE2CE341C28D26A00E1EE7F /* barrage.gif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		3F8C42FD1C2110B400189326 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3F8C42FF1C2110B400189326 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F8C43051C2112C400189326 /* LCBarrageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LCBarrageView.swift; sourceTree = "<group>"; };
+		3FE2CE341C28D26A00E1EE7F /* barrage.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = barrage.gif; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				3F361B8F1C22BB5300644121 /* SecondBarrageViewController.swift */,
 				3F8C42F71C2110B400189326 /* Main.storyboard */,
 				3F8C42FA1C2110B400189326 /* Assets.xcassets */,
+				3FE2CE341C28D26A00E1EE7F /* barrage.gif */,
 				3F8C42FC1C2110B400189326 /* LaunchScreen.storyboard */,
 				3F8C42FF1C2110B400189326 /* Info.plist */,
 			);
@@ -142,6 +145,7 @@
 				3F8C42FE1C2110B400189326 /* LaunchScreen.storyboard in Resources */,
 				3F8C42FB1C2110B400189326 /* Assets.xcassets in Resources */,
 				3F8C42F91C2110B400189326 /* Main.storyboard in Resources */,
+				3FE2CE351C28D26A00E1EE7F /* barrage.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

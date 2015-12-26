@@ -2,16 +2,15 @@
 //  SecondBarrageViewController.swift
 //  Barrage
 //
-//  Created by CaiGavin on 12/17/15.
-//  Copyright © 2015 CaiGavin. All rights reserved.
+//  Created by Cai Linfeng on 12/17/15.
+//  Copyright © 2015 Cai Linfeng. All rights reserved.
 //
 
 import UIKit
 
 class SecondBarrageViewController: UIViewController {
 
-    var barrageView: LCBarrageView?
-    let colorArray = [
+    private let colorArray = [
         UIColor.redColor(),
         UIColor.whiteColor(),
         UIColor.blueColor(),
@@ -19,16 +18,44 @@ class SecondBarrageViewController: UIViewController {
         UIColor.purpleColor(),
         UIColor.greenColor(),
         UIColor.magentaColor(),
-        UIColor.lightGrayColor(),
         UIColor.orangeColor(),
         UIColor.yellowColor()
     ]
+
+    // The Label used to load bullets(comments)
+    // Note: When the shotInterval and the rollOutDuration of bullet are really short, we may need a number of labels, which is larger than the number of bullets(comments), to hold the comments for the comments would be present circularly in Default. 
+    // TODO: 取消循环模式
+    private let bulletLabelNumber: Int = 60
+    // The number of bullet(comment)
+    private let bulletNumber: Int = 40
+    private let smallFontSize: CGFloat = 15.0
+    private let largeFontSize: CGFloat = 20.0
+
+    private var barrageView: LCBarrageView?
+
+
+    // MARK: Life-Cycle Methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = UIColor.whiteColor()
 
+        setupBarrage()
+    }
+
+    deinit {
+        barrageView?.stop()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+
+
+    // MARK: Private Methods
+
+    private func setupBarrage() {
         let testView = UIView(frame: CGRect(x: 0, y: 64, width: ScreenWidth, height: ScreenWidth))
         testView.backgroundColor = UIColor.blackColor()
         view.addSubview(testView)
@@ -36,7 +63,7 @@ class SecondBarrageViewController: UIViewController {
         barrageView = LCBarrageView()
         testView.addSubview(barrageView!)
         barrageView!.translatesAutoresizingMaskIntoConstraints = false
-        
+
         let width = NSLayoutConstraint(
             item: barrageView!,
             attribute: .Width,
@@ -92,11 +119,11 @@ class SecondBarrageViewController: UIViewController {
         var bulletTypeFactor: UInt32
         var colorPicker: UInt32
 
-        for i in 0..<40 {
+        for i in 0..<bulletNumber {
             var comment = "Bullet\(i)"
 
             fontSizeFactor = arc4random_uniform(2)
-            let fontSize: CGFloat = fontSizeFactor == 0 ? 15.0 : 20.0
+            let fontSize: CGFloat = fontSizeFactor == 0 ? smallFontSize : largeFontSize
 
             for _ in 0..<(fontSizeFactor + 2) {
                 comment += "Biu"
@@ -108,7 +135,7 @@ class SecondBarrageViewController: UIViewController {
                 comment += "Biu~"
             }
 
-            colorPicker = arc4random_uniform(10)
+            colorPicker = arc4random_uniform(UInt32(colorArray.count))
 
             var bullet = LCBullet()
             bullet.content = comment
@@ -127,16 +154,11 @@ class SecondBarrageViewController: UIViewController {
             commentsArray.append(bullet)
         }
 
-        barrageView!.bulletLabelNumber = 60
-        
+        barrageView!.bulletLabelNumber = bulletLabelNumber
         barrageView!.processBullets(bulletsArray: commentsArray)
     }
 
-
-    func barrageOnOrOff(sender: AnyObject?) {
-        guard let button = sender as? UIButton else {
-            return
-        }
+    @objc func barrageOnOrOff(button: UIButton) {
 
         button.selected = !button.selected
         if button.selected {
@@ -144,9 +166,5 @@ class SecondBarrageViewController: UIViewController {
         } else {
             barrageView?.stop()
         }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 }

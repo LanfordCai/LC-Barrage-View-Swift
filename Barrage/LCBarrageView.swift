@@ -2,8 +2,8 @@
 //  LCBarrageView.swift
 //  danmu
 //
-//  Created by CaiGavin on 11/25/15.
-//  Copyright © 2015 CaiGavin. All rights reserved.
+//  Created by Cai Linfeng on 11/25/15.
+//  Copyright © 2015 Cai Linfeng. All rights reserved.
 //
 
 import UIKit
@@ -11,18 +11,22 @@ import UIKit
 let ScreenWidth = UIScreen.mainScreen().bounds.width
 let ScreenHeight = UIScreen.mainScreen().bounds.height
 
-enum BulletType {
+enum LCBulletType {
     case Top
     case Roll
     case Bottom
 }
+
+// TODO: 允许直接添加 attrContent
+// TODO: 取消循环
+// TODO: 弹道查找模式
 
 struct LCBullet {
     var content: String?
     var color: UIColor?
     var fontSize: CGFloat?
     var attrContent: NSAttributedString?
-    var bulletType: BulletType = .Roll
+    var bulletType: LCBulletType = .Roll
 }
 
 struct LCTrajectory {
@@ -84,6 +88,7 @@ final class LCBarrageView: UIView {
 
 
     // MARK: Life-Cycle
+
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -108,6 +113,7 @@ final class LCBarrageView: UIView {
     deinit {
         removeTimer()
         NSNotificationCenter.defaultCenter().removeObserver(self)
+        print("LCBarrageView Deinit")
     }
 
 
@@ -125,29 +131,47 @@ final class LCBarrageView: UIView {
         var bulletFontSize = defaultFontSize
 
         for var bullet in bulletsArray {
-            guard let content = bullet.content where content != "" else {
+            if let attrContent = bullet.attrContent where attrContent.length != 0 {
+                ammunitionArray.append(bullet)
+            } else if let content = bullet.content where content != "" {
+
+                bulletColor = bullet.color ?? defaultColor
+                bulletFontSize = bullet.fontSize ?? defaultFontSize
+
+                let attrDict = [NSForegroundColorAttributeName: bulletColor,
+                    NSFontAttributeName: UIFont.systemFontOfSize(bulletFontSize)
+                ]
+
+                let attributedStr = NSMutableAttributedString(string: content)
+                attributedStr.addAttributes(attrDict, range: NSMakeRange(0, attributedStr.length))
+
+                bullet.attrContent = attributedStr
+
+                ammunitionArray.append(bullet)
+
+            } else {
                 continue
             }
-
-            bulletColor = bullet.color ?? defaultColor
-            bulletFontSize = bullet.fontSize ?? defaultFontSize
-
-            let attrDict = [NSForegroundColorAttributeName: bulletColor,
-                NSFontAttributeName: UIFont.systemFontOfSize(bulletFontSize)
-            ]
-
-            let attributedStr = NSMutableAttributedString(string: content)
-            attributedStr.addAttributes(attrDict, range: NSMakeRange(0, attributedStr.length))
-
-            bullet.attrContent = attributedStr
-
-            ammunitionArray.append(bullet)
         }
         
         createBulletLabel()
     }
 
-    func addNewBullet(content content: String, color: UIColor?, fontSize: CGFloat? = 15.0, bulletType: BulletType = .Roll) {
+    func addNewBullet(attrContent attrContent: NSAttributedString?, bulletType: LCBulletType = .Roll) {
+        guard let attrContent = attrContent where attrContent.length != 0 else {
+            print("[LCBarrageView] Invalid input")
+            return
+        }
+
+        let bullet = LCBullet(content: nil, color: nil, fontSize: nil, attrContent: attrContent, bulletType: bulletType)
+        ammunitionArray.append(bullet)
+    }
+
+    func addNewBullet(content content: String?, color: UIColor?, fontSize: CGFloat? = 15.0, bulletType: LCBulletType = .Roll) {
+        guard let content = content where content != "" else {
+            print("[LCBarrageView] Invalid input")
+            return
+        }
 
         let bulletColor = color ?? defaultColor
         let bulletFontSize = fontSize ?? defaultFontSize
@@ -184,7 +208,9 @@ final class LCBarrageView: UIView {
         removeTimer()
     }
 
+
     // MARK: Private
+
     private func removeTimer() {
         barrageTimer?.invalidate()
         barrageTimer = nil
@@ -208,11 +234,11 @@ final class LCBarrageView: UIView {
         }
     }
 
-    dynamic private func orientationChanged() {
+    @objc func orientationChanged() {
         isTrajectoryCreated = false
     }
 
-    dynamic private func addBullets() {
+    @objc func addBullets() {
         guard flyingBulletsNumber <= bulletLabelNumber else {
             return
         }

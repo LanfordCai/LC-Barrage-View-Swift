@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  Barrage
 //
-//  Created by CaiGavin on 12/16/15.
-//  Copyright © 2015 CaiGavin. All rights reserved.
+//  Created by Cai Linfeng on 12/16/15.
+//  Copyright © 2015 Cai Linfeng. All rights reserved.
 //
 
 import UIKit
