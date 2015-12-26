@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fn5-ve-aKb" customClass="LCBarrageView" customModule="Barrage">
-                                <rect key="frame" x="0.0" y="64" width="375" height="439"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="419"/>
                                 <color key="backgroundColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SYU-rq-2lB">
@@ -470,7 +470,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="fn5-ve-aKb" secondAttribute="bottom" constant="164" id="2hF-EO-ekH"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="fn5-ve-aKb" secondAttribute="bottom" constant="184" id="2hF-EO-ekH"/>
                             <constraint firstAttribute="trailing" secondItem="eEP-VO-UWP" secondAttribute="trailing" id="4rh-uA-vcA"/>
                             <constraint firstItem="eEP-VO-UWP" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="6js-z2-jNu"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="34A-bE-vWi" secondAttribute="bottom" id="BJE-8g-Agw"/>
@@ -515,7 +515,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="808.5" y="394.5"/>
+            <point key="canvasLocation" x="861.5" y="394.5"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="mkK-zA-qDG">

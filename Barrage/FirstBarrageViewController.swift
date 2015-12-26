@@ -115,13 +115,13 @@ class FirstBarrageViewController: UIViewController {
             fontSizeFactor = arc4random_uniform(2)
             let fontSize: CGFloat = fontSizeFactor == 0 ? 15.0 : 20.0
 
-            for _ in 0..<(fontSizeFactor + 20) {
+            for _ in 0..<(fontSizeFactor + 2) {
                 comment += "Biu"
             }
 
             bulletTypeFactor = arc4random_uniform(3)
 
-            for _ in 0..<(bulletTypeFactor + 20) {
+            for _ in 0..<(bulletTypeFactor + 3) {
                 comment += "Biu~"
             }
 
