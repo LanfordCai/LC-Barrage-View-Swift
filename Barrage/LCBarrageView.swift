@@ -11,17 +11,21 @@ import UIKit
 let ScreenWidth = UIScreen.mainScreen().bounds.width
 let ScreenHeight = UIScreen.mainScreen().bounds.height
 
-enum LCBulletType {
+public enum LCBulletType {
     case Top
     case Roll
     case Bottom
 }
 
-// TODO: 允许直接添加 attrContent
 // TODO: 取消循环
 // TODO: 弹道查找模式
 
-struct LCBullet {
+public protocol LCBarrageViewDelegate:class {
+
+    func barrageViewDidRunOutOfBullets(barrage: LCBarrageView)
+}
+
+public struct LCBullet {
     var content: String?
     var color: UIColor?
     var fontSize: CGFloat?
@@ -29,13 +33,14 @@ struct LCBullet {
     var bulletType: LCBulletType = .Roll
 }
 
-struct LCTrajectory {
+public struct LCTrajectory {
     var locationY: CGFloat
     var coldTime: Int = 0
 }
 
-final class LCBarrageView: UIView {
+public class LCBarrageView: UIView {
 
+    public weak var delegate: LCBarrageViewDelegate?
     // The number of UILabel used to show bullet
     var bulletLabelNumber: Int = 20
 
@@ -44,6 +49,8 @@ final class LCBarrageView: UIView {
 
     var defaultColor = UIColor.whiteColor()
     var defaultFontSize: CGFloat = 15.0
+
+    var circularShot = true
 
     // Base offset of Top type bullets
     var topOffset: CGFloat = 10.0
@@ -62,6 +69,7 @@ final class LCBarrageView: UIView {
 
     private var bulletLabelArray = [UILabel]()
     private var ammunitionArray = [LCBullet]()
+    private var backupAmmunitionArray = [LCBullet]()
 
     private var shortestShootInterval: Double = 0.1 {
         didSet {
@@ -89,7 +97,7 @@ final class LCBarrageView: UIView {
 
     // MARK: Life-Cycle
 
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
         super.awakeFromNib()
     }
     
@@ -97,11 +105,11 @@ final class LCBarrageView: UIView {
         super.init(frame: frame)
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
 
         if !isTrajectoryCreated {
@@ -153,7 +161,8 @@ final class LCBarrageView: UIView {
                 continue
             }
         }
-        
+
+        backupAmmunitionArray = ammunitionArray
         createBulletLabel()
     }
 
@@ -165,6 +174,7 @@ final class LCBarrageView: UIView {
 
         let bullet = LCBullet(content: nil, color: nil, fontSize: nil, attrContent: attrContent, bulletType: bulletType)
         ammunitionArray.append(bullet)
+        backupAmmunitionArray.append(bullet)
     }
 
     func addNewBullet(content content: String?, color: UIColor?, fontSize: CGFloat? = 15.0, bulletType: LCBulletType = .Roll) {
@@ -186,6 +196,11 @@ final class LCBarrageView: UIView {
         let bullet = LCBullet(content: content, color: bulletColor, fontSize: bulletFontSize, attrContent: attributedStr, bulletType: bulletType)
 
         ammunitionArray.append(bullet)
+        backupAmmunitionArray.append(bullet)
+    }
+
+    func reloadBullets() {
+        ammunitionArray = backupAmmunitionArray
     }
 
     func fire() {
@@ -255,7 +270,14 @@ final class LCBarrageView: UIView {
         let shootedBullet = lastBullet.attrContent
         bulletLabel.attributedText = shootedBullet
         ammunitionArray.removeLast()
-        ammunitionArray.insert(lastBullet, atIndex: 0)
+        if circularShot {
+            ammunitionArray.insert(lastBullet, atIndex: 0)
+        } else {
+            if ammunitionArray.isEmpty {
+                removeTimer()
+                delegate?.barrageViewDidRunOutOfBullets(self)
+            }
+        }
 
         let gunpowderStr = (bulletLabel.attributedText?.string)! as NSString
         var range = NSMakeRange(0, 1)

@@ -8,7 +8,9 @@
 
 import UIKit
 
+
 class FirstBarrageViewController: UIViewController {
+
     @IBOutlet weak private var editView: UIView!
     @IBOutlet weak private var editViewBottomConstraint: NSLayoutConstraint!
 
@@ -86,6 +88,7 @@ class FirstBarrageViewController: UIViewController {
 
     private func configuration() {
         commentTextLabel.delegate = self
+        barrageView.delegate = self
 
         colorBar = [redButton, yellowButton, greenButton, blueButton]
         fontBar = [smallFontButton, largeFontButton]
@@ -123,19 +126,21 @@ class FirstBarrageViewController: UIViewController {
 
             colorPicker = arc4random_uniform(10)
 
-//            var bullet = LCBullet()
-//            bullet.content = comment
-//            bullet.fontSize = fontSize
-//            bullet.color = colorArray[Int(colorPicker)]
-
+            // Add Content, fontSize and Color to make bullet
             var bullet = LCBullet()
-            let attrDict = [NSForegroundColorAttributeName: colorArray[Int(colorPicker)],
-                NSFontAttributeName: UIFont.systemFontOfSize(fontSize)
-            ]
+            bullet.content = comment
+            bullet.fontSize = fontSize
+            bullet.color = colorArray[Int(colorPicker)]
 
-            let commentStr = NSMutableAttributedString(string: comment)
-            commentStr.addAttributes(attrDict, range: NSMakeRange(0, commentStr.length))
-            bullet.attrContent = commentStr
+            // Add attributedString directly
+//            var bullet = LCBullet()
+//            let attrDict = [NSForegroundColorAttributeName: colorArray[Int(colorPicker)],
+//                NSFontAttributeName: UIFont.systemFontOfSize(fontSize)
+//            ]
+//
+//            let commentStr = NSMutableAttributedString(string: comment)
+//            commentStr.addAttributes(attrDict, range: NSMakeRange(0, commentStr.length))
+//            bullet.attrContent = commentStr
 
             switch bulletTypeFactor {
             case 0:
@@ -245,10 +250,26 @@ class FirstBarrageViewController: UIViewController {
         shootIntervalLabel.text = "\(barrageView.shootInterval)"
     }
 
+    @IBAction func circularShotChanged(sender: UISwitch) {
+        barrageView.circularShot = !barrageView.circularShot
+    }
+
+
 }
 
 
+// MARK: BarrageViewDelegate Methods
+
+extension FirstBarrageViewController: LCBarrageViewDelegate {
+
+    func barrageViewDidRunOutOfBullets(barrage: LCBarrageView) {
+        fireButton.selected = false
+        barrageView.reloadBullets()
+    }
+}
+
 // MARK: - TextFieldDelegate Methods
+
 
 extension FirstBarrageViewController: UITextFieldDelegate {
 
@@ -264,15 +285,18 @@ extension FirstBarrageViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
 
-//        barrageView.addNewBullet(content: textField.text, color: chosedColor, fontSize: chosedFontSize, bulletType: chosedType!)
-        let attrDict = [NSForegroundColorAttributeName: chosedColor ?? UIColor.redColor(),
-            NSFontAttributeName: UIFont.systemFontOfSize(chosedFontSize ?? 17.0)
-        ]
+        // Add Content, fontSize and Color to make bullet
+        barrageView.addNewBullet(content: textField.text, color: chosedColor, fontSize: chosedFontSize, bulletType: chosedType!)
 
-        let commentStr = NSMutableAttributedString(string: textField.text!)
-        commentStr.addAttributes(attrDict, range: NSMakeRange(0, commentStr.length))
-
-        barrageView.addNewBullet(attrContent: commentStr)
+        // Add attributedString directly
+//        let attrDict = [NSForegroundColorAttributeName: chosedColor ?? UIColor.redColor(),
+//            NSFontAttributeName: UIFont.systemFontOfSize(chosedFontSize ?? 17.0)
+//        ]
+//
+//        let commentStr = NSMutableAttributedString(string: textField.text!)
+//        commentStr.addAttributes(attrDict, range: NSMakeRange(0, commentStr.length))
+//
+//        barrageView.addNewBullet(attrContent: commentStr)
 
         textField.text = ""
         textField.resignFirstResponder()
