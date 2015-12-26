@@ -89,6 +89,7 @@ class FirstBarrageViewController: UIViewController {
     private func configuration() {
         commentTextLabel.delegate = self
         barrageView.delegate = self
+        barrageView.rollBulletsShotMode = .Random
 
         colorBar = [redButton, yellowButton, greenButton, blueButton]
         fontBar = [smallFontButton, largeFontButton]
@@ -114,13 +115,13 @@ class FirstBarrageViewController: UIViewController {
             fontSizeFactor = arc4random_uniform(2)
             let fontSize: CGFloat = fontSizeFactor == 0 ? 15.0 : 20.0
 
-            for _ in 0..<(fontSizeFactor + 2) {
+            for _ in 0..<(fontSizeFactor + 20) {
                 comment += "Biu"
             }
 
             bulletTypeFactor = arc4random_uniform(3)
 
-            for _ in 0..<(bulletTypeFactor + 2) {
+            for _ in 0..<(bulletTypeFactor + 20) {
                 comment += "Biu~"
             }
 
@@ -254,6 +255,14 @@ class FirstBarrageViewController: UIViewController {
         barrageView.circularShot = !barrageView.circularShot
     }
 
+    @IBAction func rollBulletsShotModeChanged(sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            barrageView.rollBulletsShotMode = .Random
+        default:
+            barrageView.rollBulletsShotMode = .Order
+        }
+    }
 
 }
 
@@ -264,12 +273,13 @@ extension FirstBarrageViewController: LCBarrageViewDelegate {
 
     func barrageViewDidRunOutOfBullets(barrage: LCBarrageView) {
         fireButton.selected = false
+        barrageView.stop()
         barrageView.reloadBullets()
     }
 }
 
-// MARK: - TextFieldDelegate Methods
 
+// MARK: - TextFieldDelegate Methods
 
 extension FirstBarrageViewController: UITextFieldDelegate {
 

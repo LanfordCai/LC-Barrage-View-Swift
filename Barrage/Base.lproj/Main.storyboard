@@ -22,29 +22,35 @@
                                 <color key="backgroundColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SYU-rq-2lB">
-                                <rect key="frame" x="0.0" y="503" width="375" height="30"/>
+                                <rect key="frame" x="0.0" y="483" width="375" height="50"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="shotMode:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zp0-xf-eje">
-                                        <rect key="frame" x="8" y="7" width="69" height="17"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="rollBulletsShotMode" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zp0-xf-eje">
+                                        <rect key="frame" x="8" y="8" width="70" height="34"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="70" id="zOx-uE-mRy"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="A48-en-ocq">
-                                        <rect key="frame" x="85" y="1" width="129" height="29"/>
+                                        <rect key="frame" x="86" y="11" width="129" height="29"/>
                                         <segments>
                                             <segment title="Random"/>
                                             <segment title="Order"/>
                                         </segments>
+                                        <connections>
+                                            <action selector="rollBulletsShotModeChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="lEE-EH-i28"/>
+                                        </connections>
                                     </segmentedControl>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="circularShot:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pwm-b0-Jhp">
-                                        <rect key="frame" x="228" y="7" width="82" height="17"/>
+                                        <rect key="frame" x="228" y="17" width="82" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vdi-gJ-QLL">
-                                        <rect key="frame" x="318" y="-1" width="51" height="31"/>
+                                        <rect key="frame" x="318" y="9" width="51" height="31"/>
                                         <connections>
                                             <action selector="circularShotChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="dSH-0E-k9y"/>
                                         </connections>
@@ -53,7 +59,7 @@
                                 <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="Zp0-xf-eje" firstAttribute="leading" secondItem="SYU-rq-2lB" secondAttribute="leading" constant="8" id="CyO-TK-fYN"/>
-                                    <constraint firstAttribute="height" constant="30" id="DtG-el-9qs"/>
+                                    <constraint firstAttribute="height" constant="50" id="DtG-el-9qs"/>
                                     <constraint firstItem="pwm-b0-Jhp" firstAttribute="centerY" secondItem="SYU-rq-2lB" secondAttribute="centerY" id="MHG-En-ctG"/>
                                     <constraint firstItem="vdi-gJ-QLL" firstAttribute="leading" secondItem="pwm-b0-Jhp" secondAttribute="trailing" constant="8" id="SWg-VX-bXf"/>
                                     <constraint firstAttribute="trailing" secondItem="vdi-gJ-QLL" secondAttribute="trailing" constant="8" id="Yt4-Tr-dve"/>
@@ -509,7 +515,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="848.5" y="394.5"/>
+            <point key="canvasLocation" x="808.5" y="394.5"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="mkK-zA-qDG">

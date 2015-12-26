@@ -17,9 +17,6 @@ public enum LCBulletType {
     case Bottom
 }
 
-// TODO: 取消循环
-// TODO: 弹道查找模式
-
 public protocol LCBarrageViewDelegate:class {
 
     func barrageViewDidRunOutOfBullets(barrage: LCBarrageView)
@@ -40,7 +37,14 @@ public struct LCTrajectory {
 
 public class LCBarrageView: UIView {
 
+    enum BulletShotMode {
+        case Random
+        case Order
+    }
+
     public weak var delegate: LCBarrageViewDelegate?
+
+    var rollBulletsShotMode: BulletShotMode = .Random
     // The number of UILabel used to show bullet
     var bulletLabelNumber: Int = 20
 
@@ -357,6 +361,12 @@ public class LCBarrageView: UIView {
         })
     }
 
+    private func forceCooling() {
+        for i in 0..<trajectoryNumber {
+        trajectoriesArray[i].coldTime--
+        }
+    }
+
     private func shootRollBullet(bulletLabel bulletLabel: UILabel, bulletLabelSize: CGSize) {
         let viewWidth = self.bounds.width
 
@@ -366,9 +376,28 @@ public class LCBarrageView: UIView {
             }
         }
 
-        var pickedTrajectory: Int = Int(arc4random_uniform(UInt32(trajectoryNumber)))
-        while trajectoriesArray[pickedTrajectory].coldTime != 0 {
+        var pickedTrajectory: Int
+
+        switch rollBulletsShotMode {
+        case .Random:
+            var pickTime: Int = 0
             pickedTrajectory = Int(arc4random_uniform(UInt32(trajectoryNumber)))
+            while trajectoriesArray[pickedTrajectory].coldTime > 0 {
+                pickedTrajectory = Int(arc4random_uniform(UInt32(trajectoryNumber)))
+                pickTime++
+                if pickTime % trajectoryNumber == 0 {
+                    forceCooling()
+                }
+            }
+        case .Order:
+            pickedTrajectory = 0
+            while trajectoriesArray[pickedTrajectory].coldTime > 0 {
+                pickedTrajectory++
+                if pickedTrajectory >= trajectoryNumber - 1 {
+                    pickedTrajectory = 0
+                    forceCooling()
+                }
+            }
         }
 
         trajectoriesArray[pickedTrajectory].coldTime = (bulletLabel.text?.characters.count)! / 2
