@@ -45,8 +45,8 @@ public class LCBarrageView: UIView {
     public weak var delegate: LCBarrageViewDelegate?
 
     var rollBulletsShotMode: BulletShotMode = .Random
-    // The number of UILabel used to show bullet
-    var bulletLabelNumber: Int = 30
+    // The number of CATextLayer used to show bullet
+    var bulletLayerNumber: Int = 30
 
     var blockTopBullets = false
     var blockBottomBullets = false
@@ -71,7 +71,8 @@ public class LCBarrageView: UIView {
         }
     }
 
-    private var bulletLabelArray = [UILabel]()
+
+    private var bulletLayerArray = [CATextLayer]()
     private var ammunitionArray = [LCBullet]()
     private var backupAmmunitionArray = [LCBullet]()
 
@@ -95,7 +96,6 @@ public class LCBarrageView: UIView {
     private var isTrajectoryCreated = false
     private let trajectoryNumber: Int = 20
     private lazy var trajectoriesArray = [LCTrajectory]()
-    
     private var barrageTimer: NSTimer?
 
 
@@ -125,7 +125,7 @@ public class LCBarrageView: UIView {
     deinit {
         removeTimer()
         NSNotificationCenter.defaultCenter().removeObserver(self)
-        print("LCBarrageView Deinit")
+        print("[LCBarrageView] LCBarrageView Deinit")
     }
 
 
@@ -160,14 +160,13 @@ public class LCBarrageView: UIView {
                 bullet.attrContent = attributedStr
 
                 ammunitionArray.append(bullet)
-
             } else {
                 continue
             }
         }
 
         backupAmmunitionArray = ammunitionArray
-        createBulletLabel()
+        createBulletLayerArray()
     }
 
     func addNewBullet(attrContent attrContent: NSAttributedString?, bulletType: LCBulletType = .Roll) {
@@ -235,11 +234,11 @@ public class LCBarrageView: UIView {
         barrageTimer = nil
     }
 
-    private func createBulletLabel() {
-        for _ in 0..<bulletLabelNumber {
-            let bullet = UILabel()
-            bulletLabelArray.append(bullet)
-            self.addSubview(bullet)
+    private func createBulletLayerArray() {
+        for _ in 0..<bulletLayerNumber {
+            let layer = CATextLayer()
+            bulletLayerArray.append(layer)
+            self.layer.addSublayer(layer)
         }
     }
 
@@ -258,11 +257,12 @@ public class LCBarrageView: UIView {
     }
 
     @objc func addBullets() {
-        guard flyingBulletsNumber <= bulletLabelNumber else {
+
+        guard flyingBulletsNumber <= bulletLayerNumber else {
             return
         }
 
-        guard let bulletLabel = bulletLabelArray.last else {
+        guard let bulletLayer = bulletLayerArray.last else {
             return
         }
 
@@ -270,9 +270,14 @@ public class LCBarrageView: UIView {
             return
         }
 
-        bulletLabelArray.removeLast()
+        bulletLayerArray.removeLast()
         let shootedBullet = lastBullet.attrContent
-        bulletLabel.attributedText = shootedBullet
+        bulletLayer.string = shootedBullet
+
+        guard let bulletLayerStr = bulletLayer.string as? NSAttributedString else {
+            return
+        }
+
         ammunitionArray.removeLast()
         if circularShot {
             ammunitionArray.insert(lastBullet, atIndex: 0)
@@ -283,82 +288,86 @@ public class LCBarrageView: UIView {
             }
         }
 
-        let gunpowderStr = (bulletLabel.attributedText?.string)! as NSString
+        let gunpowderStr = bulletLayerStr.string
         var range = NSMakeRange(0, 1)
-        let attrDict = bulletLabel.attributedText?.attributesAtIndex(0, effectiveRange: &range)
+        let attrDict = bulletLayerStr.attributesAtIndex(0, effectiveRange: &range)
 
-        let bulletLabelSize = gunpowderStr.sizeWithAttributes(attrDict)
+        let bulletLayerSize = gunpowderStr.sizeWithAttributes(attrDict)
 
         switch lastBullet.bulletType {
         case .Top:
-            shootTopBullet(bulletLabel: bulletLabel, bulletLabelSize: bulletLabelSize)
+            shootTopBullet(bulletLayer: bulletLayer, bulletLayerSize: bulletLayerSize)
         case .Bottom:
-            shootBottomBullet(bulletLabel: bulletLabel, bulletLabelSize: bulletLabelSize)
+            shootBottomBullet(bulletLayer: bulletLayer, bulletLayerSize: bulletLayerSize)
         case .Roll:
-            shootRollBullet(bulletLabel: bulletLabel, bulletLabelSize: bulletLabelSize)
+            shootRollBullet(bulletLayer: bulletLayer, bulletLayerSize: bulletLayerSize)
         }
     }
 
-    private func shootBottomBullet(bulletLabel bulletLabel: UILabel, bulletLabelSize: CGSize) {
+    private func shootBottomBullet(bulletLayer bulletLayer: CATextLayer, bulletLayerSize: CGSize) {
         let viewHeight = self.bounds.height
 
-        guard !blockBottomBullets else {
-            bulletLabelArray.insert(bulletLabel, atIndex: 0)
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+
+        // TODO: guard??
+        guard !blockTopBullets else {
+            bulletLayerArray.insert(bulletLayer, atIndex: 0)
             return
         }
 
         flyingBulletsNumber++
-        let bulletLabelY: CGFloat = self.bounds.height - bottomOffset
-        let bulletLabelX: CGFloat = 0.5 * (self.bounds.width - bulletLabelSize.width)
-        bulletLabel.frame = CGRectMake(bulletLabelX, bulletLabelY, bulletLabelSize.width, bulletLabelSize.height)
-        bulletLabel.alpha = 0.8
-
-        bottomOffset += bulletLabelSize.height
-
-        UIView.animateKeyframesWithDuration(2.0, delay: 0.0, options: .AllowUserInteraction, animations: { () -> Void in
-            bulletLabel.alpha = 1.0
-        }, completion: { _ in
-            bulletLabel.alpha = 0.0
-            self.bulletLabelArray.insert(bulletLabel, atIndex: 0)
-            self.bottomBulletNumber++
-
-            // The Relationship between bulletNumber and shootInterval: bottomBulletNumber should smaller than 13 - 30 * shootInterval
-            if self.bottomBulletNumber > 13 - Int(30 * self.shootInterval) || self.bottomOffset > viewHeight - 40  {
-                self.bottomOffset = 30
-                self.bottomBulletNumber = 0
+        let bulletLayerY: CGFloat = viewHeight - bottomOffset
+        let bulletLayerX: CGFloat = 0.5 * (self.bounds.width - bulletLayerSize.width)
+        bulletLayer.frame = CGRectMake(bulletLayerX, bulletLayerY, bulletLayerSize.width, bulletLayerSize.height)
+        bottomOffset += bulletLayerSize.height
+        bottomBulletNumber++
+        if bottomBulletNumber > 13 - Int(25 * shootInterval) || bottomOffset > viewHeight - 40 {
+            bottomOffset = 30
+            bottomBulletNumber = 0
+        }
+        delayBySeconds(2.0) { [weak self] in
+            guard let strongSelf = self else {
+                return
             }
-            self.flyingBulletsNumber--
-        })
+            bulletLayer.frame = CGRectZero
+            strongSelf.bulletLayerArray.insert(bulletLayer, atIndex: 0)
+            strongSelf.flyingBulletsNumber--
+            CATransaction.commit()
+        }
+
     }
 
-    private func shootTopBullet(bulletLabel bulletLabel: UILabel, bulletLabelSize: CGSize) {
+    private func shootTopBullet(bulletLayer bulletLayer: CATextLayer, bulletLayerSize: CGSize) {
         let viewHeight = self.bounds.height
+
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
 
         guard !blockTopBullets else {
-            bulletLabelArray.insert(bulletLabel, atIndex: 0)
+            bulletLayerArray.insert(bulletLayer, atIndex: 0)
             return
         }
 
         flyingBulletsNumber++
-        let bulletLabelY: CGFloat = topOffset
-        let bulletLabelX: CGFloat = 0.5 * (self.bounds.width - bulletLabelSize.width)
-        bulletLabel.frame = CGRectMake(bulletLabelX, bulletLabelY, bulletLabelSize.width, bulletLabelSize.height)
-        bulletLabel.alpha = 0.8
-
-        topOffset += bulletLabelSize.height
-
-        UIView.animateKeyframesWithDuration(2.0, delay: 0.0, options: .AllowUserInteraction, animations: { () -> Void in
-            bulletLabel.alpha = 1.0
-        }, completion: { _ in
-            bulletLabel.alpha = 0.0
-            self.bulletLabelArray.insert(bulletLabel, atIndex: 0)
-            self.topBulletNumber++
-            if self.topBulletNumber > 13 - Int(30 * self.shootInterval) || self.topOffset > viewHeight - 40 {
-                self.topOffset = 10
-                self.topBulletNumber = 0
+        let bulletLayerY: CGFloat = topOffset
+        let bulletLayerX: CGFloat = 0.5 * (self.bounds.width - bulletLayerSize.width)
+        bulletLayer.frame = CGRectMake(bulletLayerX, bulletLayerY, bulletLayerSize.width, bulletLayerSize.height)
+        topOffset += bulletLayerSize.height
+        topBulletNumber++
+        if topBulletNumber > 13 - Int(25 * shootInterval) || topOffset > viewHeight - 40 {
+            topOffset = 10
+            topBulletNumber = 0
+        }
+        delayBySeconds(2.0) { [weak self] in
+            guard let strongSelf = self else {
+                return
             }
-            self.flyingBulletsNumber--
-        })
+            bulletLayer.frame = CGRectZero
+            strongSelf.bulletLayerArray.insert(bulletLayer, atIndex: 0)
+            strongSelf.flyingBulletsNumber--
+            CATransaction.commit()
+        }
     }
 
     private func forceCooling() {
@@ -367,8 +376,14 @@ public class LCBarrageView: UIView {
         }
     }
 
-    private func shootRollBullet(bulletLabel bulletLabel: UILabel, bulletLabelSize: CGSize) {
-        let viewWidth = self.bounds.width
+    private func shootRollBullet(bulletLayer bulletLayer: CATextLayer, bulletLayerSize: CGSize) {
+        let viewWidth = self.layer.bounds.width
+
+        guard let bulletTextStr = bulletLayer.string as? NSAttributedString else {
+            return
+        }
+
+        let bulletText = bulletTextStr.string
 
         for i in 0..<trajectoryNumber {
             if trajectoriesArray[i].coldTime != 0 {
@@ -400,26 +415,41 @@ public class LCBarrageView: UIView {
             }
         }
 
-        trajectoriesArray[pickedTrajectory].coldTime = (bulletLabel.text?.characters.count)! / 2
-        let bulletLabelY = trajectoriesArray[pickedTrajectory].locationY
+        trajectoriesArray[pickedTrajectory].coldTime = bulletText.characters.count / 2
+        let bulletLayerY = trajectoriesArray[pickedTrajectory].locationY
 
-        let bulletFrame = CGRectMake(viewWidth, bulletLabelY, bulletLabelSize.width, bulletLabelSize.height)
-        bulletLabel.frame = bulletFrame
-        bulletLabel.alpha = 1.0
+        let bulletFrame = CGRectMake(viewWidth, bulletLayerY, bulletLayerSize.width, bulletLayerSize.height)
 
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        bulletLayer.frame = bulletFrame
+        bulletLayer.anchorPoint = CGPoint(x: 0.0, y: 0.0)
+        bulletLayer.position = CGPoint(x: viewWidth, y: bulletLayerY)
         let duration: CGFloat = CGFloat(arc4random() % 10) / 10.0 + rollOutDuration
-
-        let endPoint = CGPointMake(0 - bulletLabelSize.width, bulletLabel.frame.origin.y)
-        let endRect = CGRectMake(endPoint.x, endPoint.y, bulletLabelSize.width, bulletLabelSize.height)
 
         flyingBulletsNumber++
 
-        UIView.animateWithDuration(NSTimeInterval(duration), animations: { () -> Void in
-            UIView.setAnimationCurve(.Linear)
-            bulletLabel.frame = endRect
-        }, completion: { _ in
-            self.bulletLabelArray.insert(bulletLabel, atIndex: 0)
-            self.flyingBulletsNumber--
-        })
+        CATransaction.setCompletionBlock { [weak self] () -> Void in
+            bulletLayer.frame = CGRectZero
+            self?.bulletLayerArray.insert(bulletLayer, atIndex: 0)
+            self?.flyingBulletsNumber--
+        }
+
+        let transitionAnimation = CABasicAnimation(keyPath: "position.x")
+        transitionAnimation.fromValue = bulletFrame.origin.x
+        transitionAnimation.toValue = -bulletFrame.origin.x
+        transitionAnimation.duration = Double(duration)
+        transitionAnimation.repeatCount = 0
+        transitionAnimation.removedOnCompletion = true
+        bulletLayer.addAnimation(transitionAnimation, forKey: nil)
+        CATransaction.commit()
     }
 }
+
+private func delayBySeconds(seconds: Double, delayedCode: () -> ()) {
+    let targetTime = dispatch_time(DISPATCH_TIME_NOW, Int64(Double(NSEC_PER_SEC) * seconds))
+    dispatch_after(targetTime, dispatch_get_main_queue()) {
+        delayedCode()
+    }
+}
+

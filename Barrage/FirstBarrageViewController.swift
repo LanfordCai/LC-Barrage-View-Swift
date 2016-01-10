@@ -155,7 +155,7 @@ class FirstBarrageViewController: UIViewController {
             commentsArray.append(bullet)
         }
 
-        barrageView.bulletLabelNumber = 60
+        barrageView.bulletLayerNumber = 20
 
         barrageView.processBullets(bulletsArray: commentsArray)
     }

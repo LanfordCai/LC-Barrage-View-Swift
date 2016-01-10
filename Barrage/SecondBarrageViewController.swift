@@ -25,7 +25,7 @@ class SecondBarrageViewController: UIViewController {
     // The Label used to load bullets(comments)
     // Note: When the shotInterval and the rollOutDuration of bullet are really short, we may need a number of labels, which is larger than the number of bullets(comments), to hold the comments for the comments would be present circularly in Default. 
     // TODO: 取消循环模式
-    private let bulletLabelNumber: Int = 60
+    private let bulletLayerNumber: Int = 60
     // The number of bullet(comment)
     private let bulletNumber: Int = 40
     private let smallFontSize: CGFloat = 15.0
@@ -154,7 +154,7 @@ class SecondBarrageViewController: UIViewController {
             commentsArray.append(bullet)
         }
 
-        barrageView!.bulletLabelNumber = bulletLabelNumber
+        barrageView!.bulletLayerNumber = bulletLayerNumber
         barrageView!.processBullets(bulletsArray: commentsArray)
     }
 
