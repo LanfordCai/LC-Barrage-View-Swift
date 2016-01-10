@@ -17,9 +17,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fn5-ve-aKb" customClass="LCBarrageView" customModule="Barrage">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fn5-ve-aKb" userLabel="ContentView">
                                 <rect key="frame" x="0.0" y="64" width="375" height="419"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xGl-Ty-zpM" customClass="LCBarrageView" customModule="Barrage" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="419"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="xGl-Ty-zpM" secondAttribute="bottom" id="KUp-Qi-b7s"/>
+                                    <constraint firstItem="xGl-Ty-zpM" firstAttribute="leading" secondItem="fn5-ve-aKb" secondAttribute="leading" id="S9a-mv-e5o"/>
+                                    <constraint firstAttribute="trailing" secondItem="xGl-Ty-zpM" secondAttribute="trailing" id="Srg-bJ-5Lm"/>
+                                    <constraint firstItem="xGl-Ty-zpM" firstAttribute="top" secondItem="fn5-ve-aKb" secondAttribute="top" id="hFI-Gl-AaT"/>
+                                </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SYU-rq-2lB">
                                 <rect key="frame" x="0.0" y="483" width="375" height="50"/>
@@ -494,7 +506,7 @@
                     <navigationItem key="navigationItem" id="lSF-sv-Nes"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
-                        <outlet property="barrageView" destination="fn5-ve-aKb" id="c1N-Va-f5C"/>
+                        <outlet property="barrageView" destination="xGl-Ty-zpM" id="mup-I4-Ekk"/>
                         <outlet property="blueButton" destination="vd2-kQ-6ui" id="ZBU-yh-uBr"/>
                         <outlet property="bottomTypeButton" destination="efl-Lr-P6e" id="nWr-3A-aDa"/>
                         <outlet property="commentTextLabel" destination="CE5-JI-UUI" id="7k3-L9-lnE"/>

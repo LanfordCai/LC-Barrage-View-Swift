@@ -33,7 +33,7 @@ class FirstBarrageViewController: UIViewController {
     private var bulletTypeBar = [UIButton]()
     private var chosedType: LCBulletType?
 
-    @IBOutlet weak private var barrageView: LCBarrageView!
+    @IBOutlet weak var barrageView: LCBarrageView!
 
     @IBOutlet weak private var commentTextLabel: UITextField!
 

@@ -103,10 +103,14 @@ public class LCBarrageView: UIView {
 
     override public func awakeFromNib() {
         super.awakeFromNib()
+        self.backgroundColor = UIColor.clearColor()
+        self.clipsToBounds = true
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.backgroundColor = UIColor.clearColor()
+        self.clipsToBounds = true
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -223,6 +227,13 @@ public class LCBarrageView: UIView {
     }
 
     func stop() {
+        UIView.animateWithDuration(0.4, animations: { () -> Void in
+            self.frame.origin.x = -self.frame.width
+            }) { (_) -> Void in
+                self.layer.sublayers?.removeAll()
+                self.reset()
+                self.frame.origin.x = 0.0
+        }
         removeTimer()
     }
 
@@ -234,7 +245,22 @@ public class LCBarrageView: UIView {
         barrageTimer = nil
     }
 
+    private func reset() {
+        reloadBullets()
+        createBulletLayerArray()
+        for var trajectory in trajectoriesArray {
+            trajectory.coldTime = 0
+        }
+
+        topOffset = 10
+        bottomOffset = 30
+        topBulletNumber = 0
+        bottomBulletNumber = 0
+        flyingBulletsNumber = 0
+    }
+
     private func createBulletLayerArray() {
+        bulletLayerArray.removeAll()
         for _ in 0..<bulletLayerNumber {
             let layer = CATextLayer()
             bulletLayerArray.append(layer)
