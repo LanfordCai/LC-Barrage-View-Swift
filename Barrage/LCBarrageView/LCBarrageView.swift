@@ -463,7 +463,7 @@ public class LCBarrageView: UIView {
 
         let transitionAnimation = CABasicAnimation(keyPath: "position.x")
         transitionAnimation.fromValue = bulletFrame.origin.x
-        transitionAnimation.toValue = -bulletFrame.origin.x
+        transitionAnimation.toValue = -bulletLayerSize.width
         transitionAnimation.duration = Double(duration)
         transitionAnimation.repeatCount = 0
         transitionAnimation.removedOnCompletion = true
