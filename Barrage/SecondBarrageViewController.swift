@@ -11,15 +11,15 @@ import UIKit
 class SecondBarrageViewController: UIViewController {
 
     private let colorArray: [UIColor] = [
-        UIColor.red,
-        UIColor.white,
-        UIColor.blue,
-        UIColor.brown,
-        UIColor.purple,
-        UIColor.green,
-        UIColor.magenta,
-        UIColor.orange,
-        UIColor.yellow
+        .red,
+        .white,
+        .blue,
+        .brown,
+        .purple,
+        .green,
+        .magenta,
+        .orange,
+        .yellow
     ]
 
     // The Label used to load bullets(comments)
@@ -55,7 +55,7 @@ class SecondBarrageViewController: UIViewController {
     // MARK: Private Methods
 
     private func setupBarrage() {
-        let testView = UIView(frame: CGRect(x: 0, y: 64, width: ScreenWidth, height: ScreenWidth))
+        let testView = UIView(frame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width))
         testView.backgroundColor = UIColor.black
         view.addSubview(testView)
 
@@ -103,7 +103,7 @@ class SecondBarrageViewController: UIViewController {
 
         generateComments()
 
-        let fireButton = UIButton(frame: CGRect(x: 0, y: ScreenWidth + 64, width: ScreenWidth, height: 50))
+        let fireButton = UIButton(frame: CGRect(x: 0, y: UIScreen.main.bounds.width + 64, width: UIScreen.main.bounds.width, height: 50))
         fireButton.setTitle("Fire", for: .normal)
         fireButton.setTitle("Stop", for: .selected)
         fireButton.setTitleColor(UIColor.white, for: .normal)
@@ -143,11 +143,11 @@ class SecondBarrageViewController: UIViewController {
 
             switch bulletTypeFactor {
             case 0:
-                bullet.bulletType = .Top
+                bullet.bulletType = .top
             case 1:
-                bullet.bulletType = .Roll
+                bullet.bulletType = .roll
             default:
-                bullet.bulletType = .Bottom
+                bullet.bulletType = .bottom
             }
 
             commentsArray.append(bullet)

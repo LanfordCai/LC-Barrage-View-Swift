@@ -8,16 +8,16 @@
 
 import UIKit
 
-let ScreenWidth = UIScreen.main.bounds.width
-let ScreenHeight = UIScreen.main.bounds.height
+private let ScreenWidth = UIScreen.main.bounds.width
+private let ScreenHeight = UIScreen.main.bounds.height
 
 public enum LCBulletType {
-    case Top
-    case Roll
-    case Bottom
+    case top
+    case roll
+    case bottom
 }
 
-public protocol LCBarrageViewDelegate:class {
+public protocol LCBarrageViewDelegate: class {
 
     func barrageViewDidRunOutOfBullets(barrage: LCBarrageView)
 }
@@ -27,7 +27,7 @@ public struct LCBullet {
     var color: UIColor?
     var fontSize: CGFloat?
     var attrContent: NSAttributedString?
-    var bulletType: LCBulletType = .Roll
+    var bulletType: LCBulletType = .roll
 }
 
 public struct LCTrajectory {
@@ -38,13 +38,13 @@ public struct LCTrajectory {
 public class LCBarrageView: UIView {
 
     enum BulletShotMode {
-        case Random
-        case Order
+        case random
+        case ordered
     }
 
     public weak var delegate: LCBarrageViewDelegate?
 
-    var rollBulletsShotMode: BulletShotMode = .Random
+    var rollBulletsShotMode: BulletShotMode = .random
     // The number of CATextLayer used to show bullet
     var bulletLayerNumber: Int = 30
 
@@ -71,10 +71,9 @@ public class LCBarrageView: UIView {
         }
     }
 
-
-    private var bulletLayerArray = [CATextLayer]()
-    private var ammunitionArray = [LCBullet]()
-    private var backupAmmunitionArray = [LCBullet]()
+    private var bulletLayerArray: [CATextLayer] = []
+    private var ammunitionArray: [LCBullet] = []
+    private var backupAmmunitionArray: [LCBullet] = []
 
     private var shortestShootInterval: Double = 0.1 {
         didSet {
@@ -95,7 +94,7 @@ public class LCBarrageView: UIView {
 
     private var isTrajectoryCreated = false
     private let trajectoryNumber: Int = 20
-    private lazy var trajectoriesArray = [LCTrajectory]()
+    private lazy var trajectoriesArray: [LCTrajectory] = []
     private var barrageTimer: Timer?
 
 
@@ -174,7 +173,7 @@ public class LCBarrageView: UIView {
         createBulletLayerArray()
     }
 
-    func addNewBullet(attrContent: NSAttributedString?, bulletType: LCBulletType = .Roll) {
+    func addNewBullet(attrContent: NSAttributedString?, bulletType: LCBulletType = .roll) {
         guard let attrContent = attrContent, attrContent.length != 0 else {
             print("[LCBarrageView] Invalid input")
             return
@@ -185,7 +184,7 @@ public class LCBarrageView: UIView {
         backupAmmunitionArray.append(bullet)
     }
 
-    func addNewBullet(content: String?, color: UIColor?, fontSize: CGFloat? = 15.0, bulletType: LCBulletType = .Roll) {
+    func addNewBullet(content: String?, color: UIColor?, fontSize: CGFloat? = 15.0, bulletType: LCBulletType = .roll) {
         guard let content = content, content != "" else {
             print("[LCBarrageView] Invalid input")
             return
@@ -286,15 +285,9 @@ public class LCBarrageView: UIView {
 
     @objc func addBullets() {
 
-        guard flyingBulletsNumber <= bulletLayerNumber else {
-            return
-        }
-
-        guard let bulletLayer = bulletLayerArray.last else {
-            return
-        }
-
-        guard let lastBullet = ammunitionArray.last else {
+        guard flyingBulletsNumber <= bulletLayerNumber,
+            let bulletLayer = bulletLayerArray.last,
+            let lastBullet = ammunitionArray.last else {
             return
         }
 
@@ -323,11 +316,11 @@ public class LCBarrageView: UIView {
         let bulletLayerSize = gunpowderStr.size(withAttributes: attrDict)
 
         switch lastBullet.bulletType {
-        case .Top:
+        case .top:
             shootTopBullet(bulletLayer: bulletLayer, bulletLayerSize: bulletLayerSize)
-        case .Bottom:
+        case .bottom:
             shootBottomBullet(bulletLayer: bulletLayer, bulletLayerSize: bulletLayerSize)
-        case .Roll:
+        case .roll:
             shootRollBullet(bulletLayer: bulletLayer, bulletLayerSize: bulletLayerSize)
         }
     }
@@ -335,14 +328,13 @@ public class LCBarrageView: UIView {
     private func shootBottomBullet(bulletLayer: CATextLayer, bulletLayerSize: CGSize) {
         let viewHeight = self.bounds.height
 
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-
-        // TODO: guard??
         guard !blockTopBullets else {
             bulletLayerArray.insert(bulletLayer, at: 0)
             return
         }
+
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
 
         flyingBulletsNumber += 1
         let bulletLayerY: CGFloat = viewHeight - bottomOffset
@@ -400,7 +392,7 @@ public class LCBarrageView: UIView {
 
     private func forceCooling() {
         for i in 0..<trajectoryNumber {
-        trajectoriesArray[i].coldTime -= 1
+            trajectoriesArray[i].coldTime -= 1
         }
     }
 
@@ -422,7 +414,7 @@ public class LCBarrageView: UIView {
         var pickedTrajectory: Int
 
         switch rollBulletsShotMode {
-        case .Random:
+        case .random:
             var pickTime: Int = 0
             pickedTrajectory = Int(arc4random_uniform(UInt32(trajectoryNumber)))
             while trajectoriesArray[pickedTrajectory].coldTime > 0 {
@@ -432,7 +424,7 @@ public class LCBarrageView: UIView {
                     forceCooling()
                 }
             }
-        case .Order:
+        case .ordered:
             pickedTrajectory = 0
             while trajectoriesArray[pickedTrajectory].coldTime > 0 {
                 pickedTrajectory += 1
@@ -475,7 +467,6 @@ public class LCBarrageView: UIView {
 }
 
 private func delayBySeconds(seconds: Double, delayedCode: @escaping () -> Void) {
-//    let targetTime = dispatch_time(DISPATCH_TIME_NOW, Int64(Double(NSEC_PER_SEC) * seconds))
 
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds) {
         delayedCode()

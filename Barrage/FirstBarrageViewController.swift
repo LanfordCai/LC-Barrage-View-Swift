@@ -42,17 +42,17 @@ class FirstBarrageViewController: UIViewController {
     @IBOutlet weak private var shootIntervalLabel: UILabel!
     @IBOutlet weak private var rollOutDrationLabel: UILabel!
 
-    private let colorArray = [
-        UIColor.red,
-        UIColor.white,
-        UIColor.blue,
-        UIColor.brown,
-        UIColor.purple,
-        UIColor.green,
-        UIColor.magenta,
-        UIColor.lightGray,
-        UIColor.orange,
-        UIColor.yellow
+    private let colors: [UIColor] = [
+        .red,
+        .white,
+        .blue,
+        .brown,
+        .purple,
+        .green,
+        .magenta,
+        .lightGray,
+        .orange,
+        .yellow
     ]
 
 
@@ -64,14 +64,9 @@ class FirstBarrageViewController: UIViewController {
         generateComments()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
     deinit {
         barrageView.stop()
         NotificationCenter.default.removeObserver(self)
-        print("FirstVC Deinit")
     }
 
 
@@ -84,11 +79,10 @@ class FirstBarrageViewController: UIViewController {
 
     // MARK: Private Methods
 
-
     private func configuration() {
         commentTextLabel.delegate = self
         barrageView.delegate = self
-        barrageView.rollBulletsShotMode = .Random
+        barrageView.rollBulletsShotMode = .random
 
         colorBar = [redButton, yellowButton, greenButton, blueButton]
         fontBar = [smallFontButton, largeFontButton]
@@ -97,7 +91,7 @@ class FirstBarrageViewController: UIViewController {
         smallFontButton.isSelected = true
         chosedFontSize = 15.0
         rollTypeButton.isSelected = true
-        chosedType = .Roll
+        chosedType = .roll
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
@@ -130,7 +124,7 @@ class FirstBarrageViewController: UIViewController {
             var bullet = LCBullet()
             bullet.content = comment
             bullet.fontSize = fontSize
-            bullet.color = colorArray[Int(colorPicker)]
+            bullet.color = colors[Int(colorPicker)]
 
             // Add attributedString directly
 //            var bullet = LCBullet()
@@ -144,11 +138,11 @@ class FirstBarrageViewController: UIViewController {
 
             switch bulletTypeFactor {
             case 0:
-                bullet.bulletType = .Top
+                bullet.bulletType = .top
             case 1:
-                bullet.bulletType = .Roll
+                bullet.bulletType = .roll
             default:
-                bullet.bulletType = .Bottom
+                bullet.bulletType = .bottom
             }
 
             commentsArray.append(bullet)
@@ -206,11 +200,11 @@ class FirstBarrageViewController: UIViewController {
 
         switch bulletTypeButton.tag {
         case 301:
-            chosedType = .Top
+            chosedType = .top
         case 303:
-            chosedType = .Bottom
+            chosedType = .bottom
         default:
-            chosedType = .Roll
+            chosedType = .roll
         }
 
         for button in bulletTypeBar {
@@ -258,9 +252,9 @@ class FirstBarrageViewController: UIViewController {
     @IBAction func rollBulletsShotModeChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            barrageView.rollBulletsShotMode = .Random
+            barrageView.rollBulletsShotMode = .random
         default:
-            barrageView.rollBulletsShotMode = .Order
+            barrageView.rollBulletsShotMode = .ordered
         }
     }
 
@@ -284,16 +278,16 @@ extension FirstBarrageViewController: LCBarrageViewDelegate {
 extension FirstBarrageViewController: UITextFieldDelegate {
 
     @objc func keyboardWillChangeFrame(note: NSNotification) {
-        if let keyboardFrame = note.userInfo![UIKeyboardFrameEndUserInfoKey] {
-            print(keyboardFrame)
+        guard let keyboardFrame = (note.userInfo![UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue else {
+            return
         }
-//        let keyboardFrame = (note.userInfo![UIKeyboardFrameEndUserInfoKey]! as AnyObject).cgRectValue
-//        let distance = keyboardFrame?.origin.y - ScreenHeight
-//
-//        self.editViewBottomConstraint.constant = -distance
-//        UIView.animate(withDuration: 0.3) { () -> Void in
-//            self.view.layoutIfNeeded()
-//        }
+
+        let distance = keyboardFrame.origin.y - UIScreen.main.bounds.height
+
+        self.editViewBottomConstraint.constant = -distance
+        UIView.animate(withDuration: 0.3) { () -> Void in
+            self.view.layoutIfNeeded()
+        }
     }
 
     @discardableResult
