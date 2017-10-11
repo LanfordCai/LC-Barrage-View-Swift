@@ -43,16 +43,16 @@ class FirstBarrageViewController: UIViewController {
     @IBOutlet weak private var rollOutDrationLabel: UILabel!
 
     private let colorArray = [
-        UIColor.redColor(),
-        UIColor.whiteColor(),
-        UIColor.blueColor(),
-        UIColor.brownColor(),
-        UIColor.purpleColor(),
-        UIColor.greenColor(),
-        UIColor.magentaColor(),
-        UIColor.lightGrayColor(),
-        UIColor.orangeColor(),
-        UIColor.yellowColor()
+        UIColor.red,
+        UIColor.white,
+        UIColor.blue,
+        UIColor.brown,
+        UIColor.purple,
+        UIColor.green,
+        UIColor.magenta,
+        UIColor.lightGray,
+        UIColor.orange,
+        UIColor.yellow
     ]
 
 
@@ -70,15 +70,14 @@ class FirstBarrageViewController: UIViewController {
 
     deinit {
         barrageView.stop()
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
         print("FirstVC Deinit")
     }
 
 
     // MARK: Helpers
-
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesBegan(touches, withEvent: event)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
         editTextField.resignFirstResponder()
     }
 
@@ -95,12 +94,12 @@ class FirstBarrageViewController: UIViewController {
         fontBar = [smallFontButton, largeFontButton]
         bulletTypeBar = [topTypeButton, rollTypeButton, bottomTypeButton]
 
-        smallFontButton.selected = true
+        smallFontButton.isSelected = true
         chosedFontSize = 15.0
-        rollTypeButton.selected = true
+        rollTypeButton.isSelected = true
         chosedType = .Roll
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillChangeFrame:", name: UIKeyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
 
     private func generateComments() {
@@ -167,42 +166,43 @@ class FirstBarrageViewController: UIViewController {
 
     // MARK: Actions
 
-    @IBAction func fire(fireButton: UIButton) {
-        if fireButton.selected {
+    @IBAction func fire(_ sender: UIButton) {
+        if fireButton.isSelected {
             barrageView.stop()
         } else {
             barrageView.fire()
         }
 
-        fireButton.selected = !fireButton.selected
+        fireButton.isSelected = !fireButton.isSelected
     }
 
-    @IBAction func sendComment(sender: AnyObject) {
+
+    @IBAction func sendComment(_ sender: AnyObject) {
         textFieldShouldReturn(commentTextLabel)
     }
 
-    @IBAction func colorButtonTapped(colorButton: UIButton) {
-        colorButton.selected = !colorButton.selected
-        chosedColor = colorButton.selected ? colorButton.backgroundColor : UIColor.blueColor()
+    @IBAction func colorButtonTapped(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        chosedColor = sender.isSelected ? sender.backgroundColor : UIColor.blue
 
         for button in colorBar {
-            if button.tag != colorButton.tag {
-                button.selected = false
+            if button.tag != sender.tag {
+                button.isSelected = false
             }
         }
     }
 
-    @IBAction func fontButtonTapped(sender: AnyObject?) {
+    @IBAction func fontButtonTapped(_ sender: AnyObject?) {
         for button in fontBar {
-            button.selected = !button.selected
-            if button.selected {
+            button.isSelected = !button.isSelected
+            if button.isSelected {
                 chosedFontSize = button.tag == 201 ? 15.0 : 20.0
             }
         }
     }
 
-    @IBAction func bulletTypeButtonTapped(bulletTypeButton: UIButton) {
-        bulletTypeButton.selected = true
+    @IBAction func bulletTypeButtonTapped(_ bulletTypeButton: UIButton) {
+        bulletTypeButton.isSelected = true
 
         switch bulletTypeButton.tag {
         case 301:
@@ -215,47 +215,47 @@ class FirstBarrageViewController: UIViewController {
 
         for button in bulletTypeBar {
             if button.tag != bulletTypeButton.tag {
-                button.selected = false
+                button.isSelected = false
             }
         }
     }
 
-    @IBAction func rollOutDurationBeLonger(sender: AnyObject) {
+    @IBAction func rollOutDurationBeLonger(_ sender: AnyObject) {
         barrageView.rollOutDuration *= 2.0
         rollOutDrationLabel.text = "\(barrageView.rollOutDuration)"
     }
 
-    @IBAction func rollOutDurationBeShorter(sender: AnyObject) {
+    @IBAction func rollOutDurationBeShorter(_ sender: AnyObject) {
         barrageView.rollOutDuration /= 2.0
         rollOutDrationLabel.text = "\(barrageView.rollOutDuration)"
     }
 
-    @IBAction func blockTopBullets(blockTopButton: UIButton) {
-        blockTopButton.selected = !blockTopButton.selected
+    @IBAction func blockTopBullets(_ blockTopButton: UIButton) {
+        blockTopButton.isSelected = !blockTopButton.isSelected
         barrageView.blockTopBullets = !barrageView.blockTopBullets
     }
 
-    @IBAction func blockBottomBullets(blockBottomButton: UIButton) {
-        blockBottomButton.selected = !blockBottomButton.selected
+    @IBAction func blockBottomBullets(_ blockBottomButton: UIButton) {
+        blockBottomButton.isSelected = !blockBottomButton.isSelected
         barrageView.blockBottomBullets = !barrageView.blockBottomBullets
     }
 
 
-    @IBAction func shootIntervalBeLonger(sender: AnyObject) {
+    @IBAction func shootIntervalBeLonger(_ sender: AnyObject) {
         barrageView.shootInterval += 0.1
         shootIntervalLabel.text = "\(barrageView.shootInterval)"
     }
 
-    @IBAction func shootIntervalBeShorter(sender: AnyObject) {
+    @IBAction func shootIntervalBeShorter(_ sender: AnyObject) {
         barrageView.shootInterval -= 0.1
         shootIntervalLabel.text = "\(barrageView.shootInterval)"
     }
 
-    @IBAction func circularShotChanged(sender: UISwitch) {
+    @IBAction func circularShotChanged(_ sender: UISwitch) {
         barrageView.circularShot = !barrageView.circularShot
     }
 
-    @IBAction func rollBulletsShotModeChanged(sender: UISegmentedControl) {
+    @IBAction func rollBulletsShotModeChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
             barrageView.rollBulletsShotMode = .Random
@@ -272,7 +272,7 @@ class FirstBarrageViewController: UIViewController {
 extension FirstBarrageViewController: LCBarrageViewDelegate {
 
     func barrageViewDidRunOutOfBullets(barrage: LCBarrageView) {
-        fireButton.selected = false
+        fireButton.isSelected = false
         barrageView.stop()
         barrageView.reloadBullets()
     }
@@ -284,16 +284,20 @@ extension FirstBarrageViewController: LCBarrageViewDelegate {
 extension FirstBarrageViewController: UITextFieldDelegate {
 
     @objc func keyboardWillChangeFrame(note: NSNotification) {
-        let keyboardFrame = note.userInfo![UIKeyboardFrameEndUserInfoKey]!.CGRectValue
-        let distance = keyboardFrame.origin.y - ScreenHeight
-
-        self.editViewBottomConstraint.constant = -distance
-        UIView.animateWithDuration(0.3) { () -> Void in
-            self.view.layoutIfNeeded()
+        if let keyboardFrame = note.userInfo![UIKeyboardFrameEndUserInfoKey] {
+            print(keyboardFrame)
         }
+//        let keyboardFrame = (note.userInfo![UIKeyboardFrameEndUserInfoKey]! as AnyObject).cgRectValue
+//        let distance = keyboardFrame?.origin.y - ScreenHeight
+//
+//        self.editViewBottomConstraint.constant = -distance
+//        UIView.animate(withDuration: 0.3) { () -> Void in
+//            self.view.layoutIfNeeded()
+//        }
     }
 
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    @discardableResult
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 
         // Add Content, fontSize and Color to make bullet
         barrageView.addNewBullet(content: textField.text, color: chosedColor, fontSize: chosedFontSize, bulletType: chosedType!)

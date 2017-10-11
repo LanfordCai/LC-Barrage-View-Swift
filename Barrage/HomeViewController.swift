@@ -15,7 +15,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    @IBAction func pushToSecondBarrageViewController(sender: AnyObject) {
+    @IBAction func pushToSecondBarrageViewController(_ sender: UIButton) {
         let nextVC = SecondBarrageViewController()
         self.navigationController?.pushViewController(nextVC, animated: true)
     }

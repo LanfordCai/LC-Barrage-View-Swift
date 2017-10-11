@@ -10,16 +10,16 @@ import UIKit
 
 class SecondBarrageViewController: UIViewController {
 
-    private let colorArray = [
-        UIColor.redColor(),
-        UIColor.whiteColor(),
-        UIColor.blueColor(),
-        UIColor.brownColor(),
-        UIColor.purpleColor(),
-        UIColor.greenColor(),
-        UIColor.magentaColor(),
-        UIColor.orangeColor(),
-        UIColor.yellowColor()
+    private let colorArray: [UIColor] = [
+        UIColor.red,
+        UIColor.white,
+        UIColor.blue,
+        UIColor.brown,
+        UIColor.purple,
+        UIColor.green,
+        UIColor.magenta,
+        UIColor.orange,
+        UIColor.yellow
     ]
 
     // The Label used to load bullets(comments)
@@ -38,7 +38,7 @@ class SecondBarrageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.white
 
         setupBarrage()
     }
@@ -56,7 +56,7 @@ class SecondBarrageViewController: UIViewController {
 
     private func setupBarrage() {
         let testView = UIView(frame: CGRect(x: 0, y: 64, width: ScreenWidth, height: ScreenWidth))
-        testView.backgroundColor = UIColor.blackColor()
+        testView.backgroundColor = UIColor.black
         view.addSubview(testView)
 
         barrageView = LCBarrageView()
@@ -65,37 +65,37 @@ class SecondBarrageViewController: UIViewController {
 
         let width = NSLayoutConstraint(
             item: barrageView!,
-            attribute: .Width,
-            relatedBy: .Equal,
+            attribute: .width,
+            relatedBy: .equal,
             toItem: testView,
-            attribute: .Width,
+            attribute: .width,
             multiplier: 1.0,
             constant: 0)
 
         let height = NSLayoutConstraint(
             item: barrageView!,
-            attribute: .Height,
-            relatedBy: .Equal,
+            attribute: .height,
+            relatedBy: .equal,
             toItem: testView,
-            attribute: .Height,
+            attribute: .height,
             multiplier: 1.0,
             constant: 0)
 
         let top = NSLayoutConstraint(
             item: barrageView!,
-            attribute: .Top,
-            relatedBy: .Equal,
+            attribute: .top,
+            relatedBy: .equal,
             toItem: testView,
-            attribute: .Top,
+            attribute: .top,
             multiplier: 1.0,
             constant: 0)
 
         let leading = NSLayoutConstraint(
             item: barrageView!,
-            attribute: .Leading,
-            relatedBy: .Equal,
+            attribute: .leading,
+            relatedBy: .equal,
             toItem: testView,
-            attribute: .Leading,
+            attribute: .leading,
             multiplier: 1.0,
             constant: 0)
 
@@ -103,12 +103,12 @@ class SecondBarrageViewController: UIViewController {
 
         generateComments()
 
-        let fireButton = UIButton(frame: CGRectMake(0, ScreenWidth + 64, ScreenWidth, 50))
-        fireButton.setTitle("Fire", forState: .Normal)
-        fireButton.setTitle("Stop", forState: .Selected)
-        fireButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        fireButton.backgroundColor = UIColor.redColor()
-        fireButton.addTarget(self, action: "barrageOnOrOff:", forControlEvents: .TouchUpInside)
+        let fireButton = UIButton(frame: CGRect(x: 0, y: ScreenWidth + 64, width: ScreenWidth, height: 50))
+        fireButton.setTitle("Fire", for: .normal)
+        fireButton.setTitle("Stop", for: .selected)
+        fireButton.setTitleColor(UIColor.white, for: .normal)
+        fireButton.backgroundColor = UIColor.red
+        fireButton.addTarget(self, action: #selector(barrageOnOrOff), for: .touchUpInside)
         view.addSubview(fireButton)
     }
 
@@ -159,8 +159,8 @@ class SecondBarrageViewController: UIViewController {
 
     @objc func barrageOnOrOff(button: UIButton) {
 
-        button.selected = !button.selected
-        if button.selected {
+        button.isSelected = !button.isSelected
+        if button.isSelected {
             barrageView?.fire()
         } else {
             barrageView?.stop()
